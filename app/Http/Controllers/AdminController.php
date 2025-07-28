@@ -11,25 +11,10 @@ class AdminController extends Controller
         return view('admin.index');
     }
 
-    public function users(){
-        // // Logic to fetch users data
-        // $landlordsCount = 312; // Example data, replace with actual logic
-        // $tenantsCount = 780; // Example data, replace with actual logic
-        // $propertiesCount = 98; // Example data, replace with actual logic
-
-        return view('admin.users');
-    }
-
-    public function landlords()
+    public function complaint()
     {
-        // Logic to fetch landlords data
-        return view('admin.landlord');
-    }
-
-    public function tenants()
-    {
-        // Logic to fetch tenants data
-        return view('admin.tenants');
+        // Logic to fetch complaints data
+        return view('admin.complaint');
     }
 
 }
