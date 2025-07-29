@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\admin\AdminUsersController;
 use App\Http\Controllers\admin\AdminLandlordController;
@@ -11,8 +12,10 @@ use App\Http\Controllers\admin\AdminSettingsController;
 use App\Http\Controllers\admin\AdminComplaintsController;
 use App\Http\Controllers\admin\AdminPaymentsController;
 
-Route::get('/', function () {
-    return view('index');
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/', 'index')->name('home.index');
+    Route::get('/about', 'about')->name('home.about');
+    Route::get('/contact', 'contact')->name('home.contact');
 });
 
 Route::controller(AdminController::class)->prefix('admin')->group(function () {
