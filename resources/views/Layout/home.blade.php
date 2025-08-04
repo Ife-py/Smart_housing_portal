@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Smart Housing Portal')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -57,7 +58,7 @@
                             <a class="btn btn-outline-primary btn-sm" href="">Login</a>
                         </li>
                         <li class="nav-item ms-2">
-                            <a class="btn btn-primary btn-sm" href="">Sign Up</a>
+                            <a class="btn btn-primary btn-sm" href="{{ route('register.show') }}">Sign Up</a>
                         </li>
                     @else
                         <li class="nav-item dropdown ms-2">

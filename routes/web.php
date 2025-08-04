@@ -11,6 +11,7 @@ use App\Http\Controllers\admin\AdminReportsController;
 use App\Http\Controllers\admin\AdminSettingsController;
 use App\Http\Controllers\admin\AdminComplaintsController;
 use App\Http\Controllers\admin\AdminPaymentsController;
+use App\Http\Controllers\Auth\RegisterController;
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home.index');
@@ -51,3 +52,8 @@ Route::controller(AdminPaymentsController::class)->prefix('admin/payments')->gro
     Route::get('/', 'index')->name('admin.payments.index');
 });
 
+
+Route::controller(RegisterController::class)->prefix('auth/register')->group(function () {
+    Route::get('/', 'showRegistrationForm')->name('register.show');
+    Route::post('/', 'register')->name('register.submit');
+});
