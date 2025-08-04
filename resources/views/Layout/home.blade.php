@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,19 +12,23 @@
             font-family: 'Segoe UI', sans-serif;
             background-color: #f8f9fa;
         }
+
         .navbar-brand {
             font-weight: bold;
             font-size: 1.3rem;
         }
+
         .nav-link {
             margin-right: 1rem;
         }
+
         .hero-section {
             background: linear-gradient(to right, #6a11cb, #2575fc);
             color: white;
             padding: 4rem 2rem;
             border-radius: 0 0 20px 20px;
         }
+
         .footer {
             background: #ffffff;
             padding: 1.5rem 0;
@@ -31,6 +36,7 @@
         }
     </style>
 </head>
+
 <body>
 
     {{-- Navbar --}}
@@ -41,7 +47,7 @@
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-    
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item">
@@ -68,7 +74,9 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item" href="">Dashboard</a></li>
-                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
                                 <li>
                                     <form action="" method="POST">
                                         @csrf
@@ -83,7 +91,7 @@
         </div>
     </nav>
 
-   
+
 
     {{-- Content Area --}}
     <main class="container my-5">
@@ -99,4 +107,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

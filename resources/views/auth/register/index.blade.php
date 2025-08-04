@@ -40,7 +40,7 @@
                             <li><i class="bi bi-dot text-primary"></i> Lease Management</li>
                             <li><i class="bi bi-dot text-primary"></i> Maintenance Requests</li>
                             <li><i class="bi bi-dot text-primary"></i> Payment Processing</li>
-                            <a href="" class="btn btn-primary w-100 py-2">Enter Tenant Portal</a>
+                            <a href="{{ route('register.tenants.show') }}" class="btn btn-primary w-100 py-2">Enter Tenant Portal</a>
                     </div>
                 </div>
             </div>
@@ -64,7 +64,7 @@
                             <li><i class="bi bi-dot text-success"></i> Tenant Management</li>
                             <li><i class="bi bi-dot text-success"></i> Financial Tracking</li>
                             <li><i class="bi bi-dot text-success"></i> Maintenance Oversight</li>
-                      <a href="" class="btn btn-success w-100 py-2">Enter Landlord Portal</a>
+                      <a href="{{ route('register.landlords.show') }}" class="btn btn-success w-100 py-2">Enter Landlord Portal</a>
                     </div>
                 </div>
             </div>
