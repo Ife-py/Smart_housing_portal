@@ -1,8 +1,4 @@
----
 
-### ✅ Final `README.md`
-
-```markdown
 # 🏠 Smart Housing Portal: House Renting and Complaint Management System
 
 The Smart Housing Portal is a modern web-based system developed using **Laravel** that streamlines the house renting process and simplifies complaint management between tenants and landlords. It provides a unified platform for property listing, rental management, dispute resolution, and administrative oversight.
