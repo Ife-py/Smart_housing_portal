@@ -27,6 +27,13 @@
                         </div>
                     </div>
                     <div class="mb-3">
+                        <label for="username" class="form-label fw-semibold">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-person-badge"></i></span>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Choose a username" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
                         <label for="email" class="form-label fw-semibold">Email Address</label>
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
@@ -62,6 +69,13 @@
                                 <input type="text" class="form-control" id="state" name="state" placeholder="State" required>
                             </div>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="country" class="form-label fw-semibold">Country</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-flag"></i></span>
+                                <input type="text" class="form-control" id="country" name="country" placeholder="country" required>
+                            </div>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="occupation" class="form-label fw-semibold">Occupation</label>
@@ -70,11 +84,34 @@
                             <input type="text" class="form-control" id="occupation" name="occupation" placeholder="Your occupation" required>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_type" class="form-label fw-semibold">ID Type</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-card-list"></i></span>
+                                <select class="form-select" id="id_type" name="id_type" required>
+                                    <option value="">Select ID Type</option>
+                                    <option value="national_id">National ID</option>
+                                    <option value="passport">Passport</option>
+                                    <option value="driver_license">Driver's License</option>
+                                    <option value="voter_card">Voter's Card</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_number" class="form-label fw-semibold">ID/Verification Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-card-checklist"></i></span>
+                                <input type="text" class="form-control" id="id_number" name="id_number" placeholder="Enter your ID or verification number" required>
+                            </div>
+                        </div>
+                    </div>
                     <div class="mb-3">
-                        <label for="id_number" class="form-label fw-semibold">National ID/Verification Number</label>
+                        <label for="dob" class="form-label fw-semibold">Date of Birth</label>
                         <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="bi bi-card-checklist"></i></span>
-                            <input type="text" class="form-control" id="id_number" name="id_number" placeholder="Enter your ID or verification number" required>
+                            <span class="input-group-text bg-light"><i class="bi bi-calendar-date"></i></span>
+                            <input type="date" class="form-control" id="dob" name="dob" required>
                         </div>
                     </div>
                     <div class="mb-3">
