@@ -27,6 +27,13 @@
                         </div>
                     </div>
                     <div class="mb-3">
+                        <label for="username" class="form-label fw-semibold">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter your preferred username" required autofocus>
+                        </div>
+                    </div>
+                    <div class="mb-3">
                         <label for="company" class="form-label fw-semibold">Company/Business Name <span class="text-muted small">(optional)</span></label>
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="bi bi-building"></i></span>
@@ -38,6 +45,20 @@
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="bi bi-geo-alt"></i></span>
                             <input type="text" class="form-control" id="address" name="address" placeholder="Enter your address" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="occupation" class="form-label fw-semibold">Occupation</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-briefcase"></i></span>
+                            <input type="text" class="form-control" id="occupation" name="occupation" placeholder="Your occupation" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dob" class="form-label fw-semibold">Date of Birth</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-calendar-date"></i></span>
+                            <input type="date" class="form-control" id="dob" name="dob" required>
                         </div>
                     </div>
                     <div class="row">
@@ -54,6 +75,13 @@
                                 <span class="input-group-text bg-light"><i class="bi bi-flag"></i></span>
                                 <input type="text" class="form-control" id="state" name="state" placeholder="State" required>
                             </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="country" class="form-label fw-semibold">Country</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-flag"></i></span>
+                            <input type="text" class="form-control" id="country" name="country" placeholder="Country" required>
                         </div>
                     </div>
                     <div class="mb-3">
