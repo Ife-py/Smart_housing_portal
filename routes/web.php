@@ -14,6 +14,7 @@ use App\Http\Controllers\admin\AdminPaymentsController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RegisterLandlordsController;
 use App\Http\Controllers\Auth\RegisterTenantsController;
+use App\Http\Controllers\Auth\LoginController;
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home.index');
@@ -68,4 +69,9 @@ Route::controller(RegisterLandlordsController::class)->prefix('auth/register/lan
 Route::controller(RegisterTenantsController::class)->prefix('auth/register/tenants')->group(function () {
     Route::get('/', 'RegisterTenantsForm')->name('register.tenants.show');
     Route::post('/', 'register')->name('register.tenants.submit');
+});
+
+Route::controller(LoginController::class)->prefix('auth/login')->group(function () {
+    Route::get('/', 'showLoginForm')->name('auth.login');
+    Route::post('/', 'login')->name('login.submit');
 });

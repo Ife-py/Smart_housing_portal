@@ -17,13 +17,31 @@
                     <h3 class="fw-bold mb-1">Tenant Registration</h3>
                     <p class="text-muted mb-0">Create your tenant account to find and manage your home.</p>
                 </div>
-                <form method="POST" action="" enctype="multipart/form-data">
+                @if (session('status'))
+                    <div class="alert alert-success">
+                        {{ session('status') }}
+                    </div>                   
+                @endif
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                <form method="POST" action="{{ route('register.tenants.submit') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
                         <label for="name" class="form-label fw-semibold">Full Name</label>
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
                             <input type="text" class="form-control" id="name" name="name" placeholder="Enter your full name" required autofocus>
+                            @error('name')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                     <div class="mb-3">
@@ -31,6 +49,9 @@
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="bi bi-person-badge"></i></span>
                             <input type="text" class="form-control" id="username" name="username" placeholder="Choose a username" required>
+                            @error('username')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                     <div class="mb-3">
@@ -38,6 +59,9 @@
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
                             <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                            @error('email')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                     <div class="mb-3">
@@ -45,6 +69,9 @@
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="bi bi-telephone"></i></span>
                             <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number" required>
+                            @error('phone')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                     <div class="mb-3">
@@ -52,6 +79,9 @@
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="bi bi-geo-alt"></i></span>
                             <input type="text" class="form-control" id="address" name="address" placeholder="Enter your current address" required>
+                            @error('address')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                     <div class="row">
@@ -60,6 +90,9 @@
                             <div class="input-group">
                                 <span class="input-group-text bg-light"><i class="bi bi-geo"></i></span>
                                 <input type="text" class="form-control" id="city" name="city" placeholder="City" required>
+                                @error('city')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -67,6 +100,9 @@
                             <div class="input-group">
                                 <span class="input-group-text bg-light"><i class="bi bi-flag"></i></span>
                                 <input type="text" class="form-control" id="state" name="state" placeholder="State" required>
+                                @error('state')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -74,6 +110,9 @@
                             <div class="input-group">
                                 <span class="input-group-text bg-light"><i class="bi bi-flag"></i></span>
                                 <input type="text" class="form-control" id="country" name="country" placeholder="country" required>
+                                @error('country')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -82,6 +121,9 @@
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="bi bi-briefcase"></i></span>
                             <input type="text" class="form-control" id="occupation" name="occupation" placeholder="Your occupation" required>
+                            @error('occupation')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                     <div class="row">
@@ -97,6 +139,9 @@
                                     <option value="voter_card">Voter's Card</option>
                                     <option value="other">Other</option>
                                 </select>
+                                @error('id_type')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -104,14 +149,20 @@
                             <div class="input-group">
                                 <span class="input-group-text bg-light"><i class="bi bi-card-checklist"></i></span>
                                 <input type="text" class="form-control" id="id_number" name="id_number" placeholder="Enter your ID or verification number" required>
+                                @error('id_number')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="dob" class="form-label fw-semibold">Date of Birth</label>
+                        <label for="date_of_birth" class="form-label fw-semibold">Date of Birth</label>
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="bi bi-calendar-date"></i></span>
-                            <input type="date" class="form-control" id="dob" name="dob" required>
+                            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
+                            @error('date_of_birth')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                     <div class="mb-3">
@@ -119,6 +170,9 @@
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="bi bi-image"></i></span>
                             <input type="file" class="form-control" id="profile_photo" name="profile_photo" accept="image/*">
+                            @error('profile_photo')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                     <div class="mb-3">
