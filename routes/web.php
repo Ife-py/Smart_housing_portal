@@ -15,6 +15,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RegisterLandlordsController;
 use App\Http\Controllers\Auth\RegisterTenantsController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Dashboard\LandlordDashboardController;
+use App\Http\Controllers\Dashboard\TenantDashboardController;
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home.index');
@@ -74,4 +76,12 @@ Route::controller(RegisterTenantsController::class)->prefix('auth/register/tenan
 Route::controller(LoginController::class)->prefix('auth/login')->group(function () {
     Route::get('/', 'showLoginForm')->name('auth.login');
     Route::post('/', 'login')->name('login.submit');
+});
+
+Route::controller(LandlordDashboardController::class)->prefix('dashboard/landlord')->group(function () {
+    Route::get('/', 'index')->name('dashboard.landlord.index');
+});
+
+Route::controller(TenantDashboardController::class)->prefix('dashboard/tenant')->group(function () {
+    Route::get('/', 'index')->name('dashboard.tenant.index');
 });
