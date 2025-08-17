@@ -111,19 +111,19 @@
                 </div>
                 <div class="offcanvas-body p-0">
                     <nav class="sidebar">
-                        <a href="" class="{{ request()->routeIs('landlord.dashboard') ? 'active' : '' }}">
+                        <a href="{{ route('dashboard.landlord.index') }}" class="{{ request()->routeIs('landlord.dashboard') ? 'active' : '' }}">
                             <i class="fa-solid fa-gauge"></i> Dashboard
                         </a>
-                        <a href="" class="{{ request()->routeIs('landlord.properties') ? 'active' : '' }}">
+                        <a href="{{ route('dashboard.landlord.properties.index') }}" class="{{ request()->routeIs('landlord.properties') ? 'active' : '' }}">
                             <i class="fa-solid fa-building"></i> Manage Properties
                         </a>
-                        <a href="" class="{{ request()->routeIs('landlord.tenants') ? 'active' : '' }}">
+                        <a href="{{ route('dashboard.landlord.tenants.index') }}" class="{{ request()->routeIs('landlord.tenants') ? 'active' : '' }}">
                             <i class="fa-solid fa-users"></i> Tenants
                         </a>
-                        <a href="" class="{{ request()->routeIs('landlord.complaints') ? 'active' : '' }}">
+                        <a href="{{ route('dashboard.landlord.complaints.index') }}" class="{{ request()->routeIs('landlord.complaints') ? 'active' : '' }}">
                             <i class="fa-solid fa-triangle-exclamation"></i> Complaints
                         </a>
-                        <a href="" class="{{ request()->routeIs('landlord.settings') ? 'active' : '' }}">
+                        <a href="{{ route('dashboard.landlord.settings.index') }}" class="{{ request()->routeIs('landlord.settings') ? 'active' : '' }}">
                             <i class="fa-solid fa-gear"></i> Settings
                         </a>
                         <a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -140,19 +140,19 @@
                 <div class="sidebar-header text-center mb-4">
                     <i class="fa-solid fa-house-user me-2"></i> Landlord
                 </div>
-                <a href="" class="{{ request()->routeIs('landlord.dashboard') ? 'active' : '' }}">
+                <a href="{{ route('dashboard.landlord.index') }}" class="{{ request()->routeIs('landlord.dashboard') ? 'active' : '' }}">
                     <i class="fa-solid fa-gauge"></i> Dashboard
                 </a>
-                <a href="" class="{{ request()->routeIs('landlord.properties') ? 'active' : '' }}">
+                <a href="{{ route('dashboard.landlord.properties.index') }}" class="{{ request()->routeIs('landlord.properties') ? 'active' : '' }}">
                     <i class="fa-solid fa-building"></i> Manage Properties
                 </a>
-                <a href="" class="{{ request()->routeIs('landlord.tenants') ? 'active' : '' }}">
+                <a href="{{ route('dashboard.landlord.tenants.index') }}" class="{{ request()->routeIs('landlord.tenants') ? 'active' : '' }}">
                     <i class="fa-solid fa-users"></i> Tenants
                 </a>
-                <a href="" class="{{ request()->routeIs('landlord.complaints') ? 'active' : '' }}">
+                <a href="{{ route('dashboard.landlord.complaints.index') }}" class="{{ request()->routeIs('landlord.complaints') ? 'active' : '' }}">
                     <i class="fa-solid fa-triangle-exclamation"></i> Complaints
                 </a>
-                <a href="" class="{{ request()->routeIs('landlord.settings') ? 'active' : '' }}">
+                <a href="{{ route('dashboard.landlord.settings.index') }}" class="{{ request()->routeIs('landlord.settings') ? 'active' : '' }}">
                     <i class="fa-solid fa-gear"></i> Settings
                 </a>
                 <a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

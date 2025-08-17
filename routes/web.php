@@ -16,6 +16,11 @@ use App\Http\Controllers\Auth\RegisterLandlordsController;
 use App\Http\Controllers\Auth\RegisterTenantsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Dashboard\LandlordDashboardController;
+use App\Http\Controllers\Dashboard\landlord\ComplaintController;
+use App\Http\Controllers\Dashboard\landlord\PaymentController;
+use App\Http\Controllers\Dashboard\landlord\PropertiesController;
+use App\Http\Controllers\Dashboard\landlord\SettingsController;
+use App\Http\Controllers\Dashboard\landlord\TenantController;
 use App\Http\Controllers\Dashboard\TenantDashboardController;
 
 Route::controller(HomeController::class)->group(function () {
@@ -24,38 +29,41 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/contact', 'contact')->name('home.contact');
 });
 
-Route::controller(AdminController::class)->prefix('admin')->group(function () {
-    Route::get('/','index')->name('admin.index');
-    Route::get('/complaints','complaint')->name('admin.complaints');
+Route::prefix('admin')->name('admin.')->group(function(){
+    Route::controller(AdminController::class)->group(function () {
+        Route::get('/','index')->name('index');
+        Route::get('/complaints','complaint')->name('complaints');
+    });
+    Route::controller(AdminUsersController::class)->prefix('/users')->group(function () {
+        Route::get('/', 'index')->name('users.index');
+    });
+
+    Route::controller(AdminLandlordController::class)->prefix('/landlords')->group(function () {
+        Route::get('/', 'index')->name('landlords.index');
+    });
+    
+    Route::controller(AdminTenantsController::class)->prefix('/tenants')->group(function () {
+        Route::get('/', 'index')->name('tenants.index');
+    });
+
+    Route::controller(AdminReportsController::class)->prefix('/reports')->group(function () {
+        Route::get('/', 'index')->name('reports.index');
+    });
+
+    Route::controller(AdminSettingsController::class)->prefix('/settings')->group(function () {
+        Route::get('/', 'index')->name('settings.index');
+    });
+    Route::controller(AdminPropertiesController::class)->prefix('/properties')->group(function () {
+        Route::get('/', 'index')->name('properties.index');
+    });
+    
+    Route::controller(AdminPaymentsController::class)->prefix('/payments')->group(function () {
+        Route::get('/', 'index')->name('payments.index');
+    });
+
 });
 
-Route::controller(AdminUsersController::class)->prefix('admin/users')->group(function () {
-    Route::get('/', 'index')->name('admin.users.index');
-});
 
-Route::controller(AdminLandlordController::class)->prefix('admin/landlords')->group(function () {
-    Route::get('/', 'index')->name('admin.landlords.index');
-});
-
-Route::controller(AdminTenantsController::class)->prefix('admin/tenants')->group(function () {
-    Route::get('/', 'index')->name('admin.tenants.index');
-});
-
-Route::controller(AdminReportsController::class)->prefix('admin/reports')->group(function () {
-    Route::get('/', 'index')->name('admin.reports.index');
-});
-
-Route::controller(AdminSettingsController::class)->prefix('admin/settings')->group(function () {
-    Route::get('/', 'index')->name('admin.settings.index');
-});
-
-Route::controller(AdminPropertiesController::class)->prefix('admin/properties')->group(function () {
-    Route::get('/', 'index')->name('admin.properties.index');
-});
-
-Route::controller(AdminPaymentsController::class)->prefix('admin/payments')->group(function () {
-    Route::get('/', 'index')->name('admin.payments.index');
-});
 
 
 Route::controller(RegisterController::class)->prefix('auth/register')->group(function () {
@@ -78,8 +86,22 @@ Route::controller(LoginController::class)->prefix('auth/login')->group(function 
     Route::post('/', 'login')->name('login.submit');
 });
 
-Route::controller(LandlordDashboardController::class)->prefix('dashboard/landlord')->group(function () {
-    Route::get('/', 'index')->name('dashboard.landlord.index');
+Route::prefix('dashboard/landlord')->name('dashboard.landlord.')->group(function(){
+    Route::controller(LandlordDashboardController::class)->group(function(){
+        Route::get('/','index')->name('index');
+    });
+    Route::controller(PropertiesController::class)->prefix('/properties')->group(function(){
+        Route::get('/','index')->name('properties.index');
+    });
+    Route::controller(SettingsController::class)->prefix('/settings')->group(function(){
+        Route::get('/','index')->name('settings.index');
+    });
+    Route::controller(TenantController::class)->prefix('/tenants')->group(function(){
+        Route::get('/','index')->name('tenants.index');
+    });
+    Route::controller(ComplaintController::class)->prefix('/complaint')->group(function(){
+        Route::get('/','index')->name('complaints.index');
+    });
 });
 
 Route::controller(TenantDashboardController::class)->prefix('dashboard/tenant')->group(function () {
