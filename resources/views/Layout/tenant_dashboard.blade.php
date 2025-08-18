@@ -85,32 +85,32 @@
             <nav class="col-lg-2 col-md-3 d-none d-md-block sidebar py-4 px-2">
                 <ul class="nav flex-column">
                     <li class="nav-item mb-1">
-                        <a class="nav-link @if(request()->routeIs('tenant.dashboard')) active @endif" href="">
+                        <a class="nav-link @if(request()->routeIs('tenant.dashboard')) active @endif" href="{{ route('dashboard.tenant.index') }}">
                             <i class="fa-solid fa-gauge"></i> Dashboard
                         </a>
                     </li>
                     <li class="nav-item mb-1">
-                        <a class="nav-link @if(request()->routeIs('tenant.properties')) active @endif" href="">
+                        <a class="nav-link @if(request()->routeIs('tenant.properties')) active @endif" href="{{ route('dashboard.tenant.properties.index') }}">
                             <i class="fa-solid fa-building"></i> My Properties
                         </a>
                     </li>
                     <li class="nav-item mb-1">
-                        <a class="nav-link @if(request()->routeIs('tenant.payments')) active @endif" href="">
+                        <a class="nav-link @if(request()->routeIs('tenant.payments')) active @endif" href="{{ route('dashboard.tenant.payments.index') }}">
                             <i class="fa-solid fa-credit-card"></i> Payments
                         </a>
                     </li>
                     <li class="nav-item mb-1">
-                        <a class="nav-link @if(request()->routeIs('tenant.maintenance')) active @endif" href="">
+                        <a class="nav-link @if(request()->routeIs('tenant.maintenance')) active @endif" href="{{ route('dashboard.tenant.maintenance.index') }}">
                             <i class="fa-solid fa-screwdriver-wrench"></i> Maintenance
                         </a>
                     </li>
                     <li class="nav-item mb-1">
-                        <a class="nav-link @if(request()->routeIs('tenant.complaints')) active @endif" href="">
+                        <a class="nav-link @if(request()->routeIs('tenant.complaints')) active @endif" href="{{ route('dashboard.tenant.complaints.index') }}">
                             <i class="fa-solid fa-triangle-exclamation"></i> Complaints
                         </a>
                     </li>
                     <li class="nav-item mb-1">
-                        <a class="nav-link @if(request()->routeIs('tenant.settings')) active @endif" href="">
+                        <a class="nav-link @if(request()->routeIs('tenant.settings')) active @endif" href="{{ route('dashboard.tenant.settings.index') }}">
                             <i class="fa-solid fa-gear"></i> Settings
                         </a>
                     </li>
@@ -120,27 +120,27 @@
             <nav class="col-12 d-md-none sidebar py-2 px-2 mb-3">
                 <ul class="nav flex-row justify-content-around">
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('tenant.dashboard')) active @endif" href="">
+                        <a class="nav-link @if(request()->routeIs('tenant.dashboard')) active @endif" href="{{ route('dashboard.tenant.index') }}">
                             <i class="fa-solid fa-gauge"></i>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('tenant.properties')) active @endif" href="">
+                        <a class="nav-link @if(request()->routeIs('tenant.properties')) active @endif" href="{{ route('dashboard.tenant.properties.index') }}">
                             <i class="fa-solid fa-building"></i>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('tenant.payments')) active @endif" href="">
+                        <a class="nav-link @if(request()->routeIs('tenant.payments')) active @endif" href="{{ route('dashboard.tenant.payments.index') }}">
                             <i class="fa-solid fa-credit-card"></i>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('tenant.maintenance')) active @endif" href="">
+                        <a class="nav-link @if(request()->routeIs('tenant.maintenance')) active @endif" href="{{ route('dashboard.tenant.maintenance.index') }}">
                             <i class="fa-solid fa-screwdriver-wrench"></i>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('tenant.settings')) active @endif" href="">
+                        <a class="nav-link @if(request()->routeIs('tenant.settings')) active @endif" href="{{ route('dashboard.tenant.settings.index') }}">
                             <i class="fa-solid fa-gear"></i>
                         </a>
                     </li>

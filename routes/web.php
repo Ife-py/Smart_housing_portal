@@ -16,12 +16,17 @@ use App\Http\Controllers\Auth\RegisterLandlordsController;
 use App\Http\Controllers\Auth\RegisterTenantsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Dashboard\LandlordDashboardController;
-use App\Http\Controllers\Dashboard\landlord\ComplaintController;
-use App\Http\Controllers\Dashboard\landlord\PaymentController;
-use App\Http\Controllers\Dashboard\landlord\PropertiesController;
-use App\Http\Controllers\Dashboard\landlord\SettingsController;
-use App\Http\Controllers\Dashboard\landlord\TenantController;
+use App\Http\Controllers\Dashboard\Landlord\ComplaintController;
+use App\Http\Controllers\Dashboard\Landlord\PaymentController;
+use App\Http\Controllers\Dashboard\Landlord\PropertiesController;
+use App\Http\Controllers\Dashboard\Landlord\SettingsController;
+use App\Http\Controllers\Dashboard\Landlord\TenantController;
 use App\Http\Controllers\Dashboard\TenantDashboardController;
+use App\Http\Controllers\Dashboard\Tenant\TenantComplaintsController;
+use App\Http\Controllers\Dashboard\Tenant\TenantPropertiesController;
+use App\Http\Controllers\Dashboard\Tenant\TenantSettingsController;
+use App\Http\Controllers\Dashboard\Tenant\TenantMaintenanceController;
+use App\Http\Controllers\Dashboard\Tenant\TenantPaymentController;
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home.index');
@@ -64,8 +69,6 @@ Route::prefix('admin')->name('admin.')->group(function(){
 });
 
 
-
-
 Route::controller(RegisterController::class)->prefix('auth/register')->group(function () {
     Route::get('/', 'showRegistrationForm')->name('register.show');
     Route::post('/', 'register')->name('register.submit');
@@ -104,6 +107,23 @@ Route::prefix('dashboard/landlord')->name('dashboard.landlord.')->group(function
     });
 });
 
-Route::controller(TenantDashboardController::class)->prefix('dashboard/tenant')->group(function () {
-    Route::get('/', 'index')->name('dashboard.tenant.index');
+Route::prefix('dashboard/tenant')->name('dashboard.tenant.')->group(function(){
+    Route::controller(TenantDashboardController::class)->group(function(){
+        Route::get('/','index')->name('index');
+    });
+    Route::controller(TenantPropertiesController::class)->prefix('/properties')->group(function(){
+        Route::get('/','index')->name('properties.index');
+    });
+    Route::controller(TenantSettingsController::class)->prefix('/settings')->group(function(){
+        Route::get('/','index')->name('settings.index');
+    });
+    Route::controller(TenantComplaintsController::class)->prefix('/complaints')->group(function(){
+        Route::get('/','index')->name('complaints.index');
+    });
+    Route::controller(TenantMaintenanceController::class)->prefix('/maintenance')->group(function(){
+        Route::get('/','index')->name('maintenance.index');
+    });
+    Route::controller(TenantPaymentController::class)->prefix('/payments')->group(function(){
+        Route::get('/','index')->name('payments.index');
+    });
 });
