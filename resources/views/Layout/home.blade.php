@@ -61,7 +61,7 @@
                     </li>
                     @guest
                         <li class="nav-item">
-                            <a class="btn btn-outline-primary btn-sm" href="">Login</a>
+                            <a class="btn btn-outline-primary btn-sm" href="{{ route('auth.login') }}">Login</a>
                         </li>
                         <li class="nav-item ms-2">
                             <a class="btn btn-primary btn-sm" href="{{ route('register.show') }}">Sign Up</a>
