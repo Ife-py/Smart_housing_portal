@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\admin\AdminUsersController;
 use App\Http\Controllers\admin\AdminLandlordController;
 use App\Http\Controllers\admin\AdminTenantsController;
@@ -37,8 +38,8 @@ Route::controller(HomeController::class)->group(function () {
 Route::prefix('admin')->name('admin.')->group(function(){
     Route::controller(AdminController::class)->group(function () {
         Route::get('/','index')->name('index');
-        Route::get('/complaints','complaint')->name('complaints');
     });
+
     Route::controller(AdminUsersController::class)->prefix('/users')->group(function () {
         Route::get('/', 'index')->name('users.index');
     });
@@ -93,6 +94,7 @@ Route::prefix('dashboard/landlord')->name('dashboard.landlord.')->group(function
     Route::controller(LandlordDashboardController::class)->group(function(){
         Route::get('/','index')->name('index');
     });
+    Route::post('/logout',[LogoutController::class,'logout'])->name('logout');
     Route::controller(PropertiesController::class)->prefix('/properties')->group(function(){
         Route::get('/','index')->name('properties.index');
     });
@@ -111,6 +113,7 @@ Route::prefix('dashboard/tenant')->name('dashboard.tenant.')->group(function(){
     Route::controller(TenantDashboardController::class)->group(function(){
         Route::get('/','index')->name('index');
     });
+    Route::post('/logout',[LogoutController::class,'logout'])->name('logout');
     Route::controller(TenantPropertiesController::class)->prefix('/properties')->group(function(){
         Route::get('/','index')->name('properties.index');
     });

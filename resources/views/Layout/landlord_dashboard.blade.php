@@ -126,7 +126,7 @@
                         <a href="{{ route('dashboard.landlord.settings.index') }}" class="{{ request()->routeIs('landlord.settings') ? 'active' : '' }}">
                             <i class="fa-solid fa-gear"></i> Settings
                         </a>
-                        <a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <a href="{{ route('dashboard.landlord.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <i class="fa-solid fa-right-from-bracket"></i> Logout
                         </a>
                         <form id="logout-form" action="" method="POST" class="d-none">

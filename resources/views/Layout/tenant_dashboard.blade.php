@@ -69,7 +69,7 @@
                         <img src="{{ Auth::user()->profile_photo ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name ?? 'Admin') }}" alt="Profile" class="profile-img">
                     </li>
                     <li class="nav-item ms-3">
-                        <form method="POST" action="">
+                        <form method="POST" action="{{ route('dashboard.tenant.logout') }}">
                             @csrf
                             <button class="btn btn-outline-danger btn-sm" type="submit"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
                         </form>
