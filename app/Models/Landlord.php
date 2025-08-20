@@ -34,4 +34,8 @@ class Landlord extends Authenticatable
         'password', 
         'remember_token'
     ];
+
+    public function isActive()  {
+        return $this->active == 1; // or whatever value means 'active' in your database
+    }
 }

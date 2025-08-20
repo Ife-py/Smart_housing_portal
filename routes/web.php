@@ -5,8 +5,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\admin\AdminUsersController;
-use App\Http\Controllers\admin\AdminLandlordController;
-use App\Http\Controllers\admin\AdminTenantsController;
 use App\Http\Controllers\admin\AdminPropertiesController;
 use App\Http\Controllers\admin\AdminReportsController;
 use App\Http\Controllers\admin\AdminSettingsController;
@@ -42,14 +40,7 @@ Route::prefix('admin')->name('admin.')->group(function(){
 
     Route::controller(AdminUsersController::class)->prefix('/users')->group(function () {
         Route::get('/', 'index')->name('users.index');
-    });
-
-    Route::controller(AdminLandlordController::class)->prefix('/landlords')->group(function () {
-        Route::get('/', 'index')->name('landlords.index');
-    });
-    
-    Route::controller(AdminTenantsController::class)->prefix('/tenants')->group(function () {
-        Route::get('/', 'index')->name('tenants.index');
+        Route::get('/{type}/{id}','show')->name('users.show');
     });
 
     Route::controller(AdminReportsController::class)->prefix('/reports')->group(function () {
@@ -63,6 +54,9 @@ Route::prefix('admin')->name('admin.')->group(function(){
         Route::get('/', 'index')->name('properties.index');
     });
     
+    Route::controller(AdminComplaintsController::class)->prefix('/complaints')->group(function () {
+        Route::get('/', 'index')->name('complaints.index');
+    });
     Route::controller(AdminPaymentsController::class)->prefix('/payments')->group(function () {
         Route::get('/', 'index')->name('payments.index');
     });

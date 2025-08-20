@@ -28,6 +28,7 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Email</th>
+                            <th>Usename</th>
                             <th>Role</th>
                             <th>Status</th>
                             <th>Actions</th>
@@ -35,7 +36,7 @@
                     </thead>
                     <tbody>
                         {{-- Example static data, replace with @foreach($users as $user) --}}
-                        <tr>
+                        {{-- <tr>
                             <td>1</td>
                             <td>Jane Doe</td>
                             <td>jane@example.com</td>
@@ -58,7 +59,51 @@
                                 <a href="#" class="btn btn-sm btn-warning">Edit</a>
                                 <a href="#" class="btn btn-sm btn-danger">Delete</a>
                             </td>
+                        </tr> --}}
+                        @foreach ($tenants as $tenant)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $tenant->name }}</td>
+                            <td>{{ $tenant->email }}</td>
+                            <td>{{ $tenant->username }}</td>
+                            <td>Tenant</td> 
+                            <td>
+                                <span class="badge bg-{{ $tenant->isActive() ? 'success' : 'secondary' }}">
+                                    {{ $tenant->isActive() ? 'Active' : 'Inactive' }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ route('admin.users.show', ['type'=>'tenant','id' =>$tenant->id]) }}" class="btn btn-sm btn-info">View</a>
+                                <form action="" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE') 
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </td>  
                         </tr>
+                        @endforeach
+                        @foreach ($landlords as $landlord)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $landlord->name }}</td>
+                            <td>{{ $landlord->email }}</td>
+                            <td>{{ $landlord->username }}</td>
+                            <td>Landlord</td>
+                            <td>
+                                <span class="badge bg-{{ $landlord->isActive() ? 'success' : 'secondary' }}">
+                                    {{ $landlord->isActive() ? 'Active' : 'Inactive' }}
+                                </span>
+                            </td>
+                            <td>
+                                    <a href="{{ route('admin.users.show', ['type'=>'landlord','id' =>$landlord->id]) }}" class="btn btn-sm btn-info">View</a>
+                                <form action="" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
                         {{-- @endforeach --}}
                     </tbody>
                 </table>

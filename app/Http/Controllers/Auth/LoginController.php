@@ -16,7 +16,7 @@ class LoginController extends Controller
     }
     
     public function login(Request $request){
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('username', 'password');
         // Try tenant login
         if (Auth::guard('tenant')->attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
@@ -30,14 +30,14 @@ class LoginController extends Controller
         }
 
         // Try admin login
-        if (Auth::guard('admin')->attempt($credentials, $request->filled('remember'))) {
-            $request->session()->regenerate();
-            return redirect()->route('admin.index');
-        }
+        // if (Auth::guard('admin')->attempt($credentials, $request->filled('remember'))) {
+        //     $request->session()->regenerate();
+        //     return redirect()->route('admin.index');
+        // }
 
         // If all fail
         return back()->withErrors([
             'email' => 'These credentials do not match our records.',
-        ])->onlyInput('email');
+        ])->onlyInput('username1');
     }
 }

@@ -122,25 +122,13 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('admin.landlords.index') }}"
-                    class="nav-link {{ request()->routeIs('admin.landlords') ? 'active' : '' }}">
-                    <i class="bi bi-building icon"></i> Landlords
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('admin.tenants.index') }}"
-                    class="nav-link {{ request()->routeIs('admin.tenants') ? 'active' : '' }}">
-                    <i class="bi bi-house-door icon"></i> Tenants
-                </a>
-            </li>
-            <li>
                 <a href="{{ route('admin.properties.index') }}"
                     class="nav-link {{ request()->routeIs('admin.properties') ? 'active' : '' }}">
                     <i class="bi bi-house icon"></i> Properties
                 </a>
             </li>
             <li>
-                <a href="{{ route('admin.complaints') }}"
+                <a href="{{ route('admin.complaints.index') }}"
                     class="nav-link {{ request()->routeIs('admin.complaints') ? 'active' : '' }}">
                     <i class="bi bi-exclamation-triangle icon"></i> Complaints
                 </a>

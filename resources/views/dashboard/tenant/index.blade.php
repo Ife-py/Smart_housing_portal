@@ -61,8 +61,8 @@
 			</div>
 		</div>
 		<div class="col-md-4 text-md-end mt-3 mt-md-0">
-			<a href="#" class="btn btn-light quick-action-btn me-2"><i class="fa fa-building me-1"></i> My Properties</a>
-			<a href="#" class="btn btn-outline-light quick-action-btn"><i class="fa fa-money-bill-wave me-1"></i> Make Payment</a>
+			<a href="{{ route('dashboard.tenant.maintenance.index') }}" class="btn btn-light quick-action-btn me-2"><i class="fa fa-building me-1"></i> My Properties</a>
+			<a href="{{ route('dashboard.tenant.payments.index') }}" class="btn btn-outline-light quick-action-btn"><i class="fa fa-money-bill-wave me-1"></i> Make Payment</a>
 		</div>
 	</div>
 </div>
@@ -119,9 +119,9 @@
 	<div class="col-md-5">
 		<div class="dashboard-card border-0 h-100 p-4">
 			<div class="fw-bold mb-3 fs-5"><i class="fa fa-bolt me-2 text-warning"></i>Quick Actions</div>
-			<a href="#" class="btn btn-primary mb-2 w-100 quick-action-btn"><i class="fa fa-building me-1"></i> View My Properties</a>
-			<a href="#" class="btn btn-outline-success mb-2 w-100 quick-action-btn"><i class="fa fa-money-bill-wave me-1"></i> Make Payment</a>
-			<a href="#" class="btn btn-outline-warning w-100 quick-action-btn"><i class="fa fa-wrench me-1"></i> Request Maintenance</a>
+			<a href="{{ route('dashboard.tenant.properties.index')}}" class="btn btn-primary mb-2 w-100 quick-action-btn"><i class="fa fa-building me-1"></i> View My Properties</a>
+			<a href="{{ route('dashboard.tenant.payments.index') }}" class="btn btn-outline-success mb-2 w-100 quick-action-btn"><i class="fa fa-money-bill-wave me-1"></i> Make Payment</a>
+			<a href="{{ route('dashboard.tenant.maintenance.index') }}" class="btn btn-outline-warning w-100 quick-action-btn"><i class="fa fa-wrench me-1"></i> Request Maintenance</a>
 		</div>
 	</div>
 </div>

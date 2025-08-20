@@ -10,6 +10,6 @@ class AdminComplaintsController extends Controller
     public function index()
     {
         // Logic to fetch complaints data
-        return view('admin.complaints.index');
+        return view('admin.complaint');
     }
 }

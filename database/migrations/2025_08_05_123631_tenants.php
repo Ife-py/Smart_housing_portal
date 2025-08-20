@@ -27,6 +27,7 @@ return new class extends Migration
             $table->date('date_of_birth')->nullable();
             $table->string('image_path')->nullable();
             $table->string('password');
+            $table->boolean('active')->default(1); // 1 for active, 0 for inactive
             $table->timestamps();
         });
     }
