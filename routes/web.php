@@ -29,6 +29,7 @@ use App\Http\Controllers\Dashboard\Tenant\TenantPaymentController;
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home.index');
+    Route::get('/properties','properties')->name('home.properties');
     Route::get('/about', 'about')->name('home.about');
     Route::get('/contact', 'contact')->name('home.contact');
 });
