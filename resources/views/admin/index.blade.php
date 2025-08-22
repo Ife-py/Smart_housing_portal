@@ -9,7 +9,7 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <h5 class="card-title">Total Users</h5>
-                    {{-- <p class="card-text fs-4 fw-semibold">{{ $usersCount ?? '1,234' }}</p> --}}
+                    <p class="card-text fs-4 fw-semibold">1,234</p>
                 </div>
             </div>
         </div>
@@ -17,7 +17,7 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <h5 class="card-title">Landlords</h5>
-                    {{-- <p class="card-text fs-4 fw-semibold">{{ $landlordsCount ?? '312' }}</p> --}}
+                    <p class="card-text fs-4 fw-semibold">312</p>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <h5 class="card-title">Tenants</h5>
-                    {{-- <p class="card-text fs-4 fw-semibold">{{ $tenantsCount ?? '780' }}</p> --}}
+                    <p class="card-text fs-4 fw-semibold">780</p>
                 </div>
             </div>
         </div>
@@ -33,7 +33,7 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <h5 class="card-title">Properties Listed</h5>
-                    {{-- <p class="card-text fs-4 fw-semibold">{{ $propertiesCount ?? '98' }}</p> --}}
+                    <p class="card-text fs-4 fw-semibold">98</p>
                 </div>
             </div>
         </div>
@@ -47,18 +47,24 @@
                     Recent Complaints
                 </div>
                 <div class="card-body">
-                    {{-- @if(isset($complaints) && count($complaints) > 0)
-                        <ul class="list-group list-group-flush">
-                            @foreach($complaints as $complaint)
-                                <li class="list-group-item">
-                                    <strong>{{ $complaint->tenant_name }}</strong>: {{ Str::limit($complaint->message, 80) }}
-                                    <span class="text-muted float-end">{{ $complaint->created_at->diffForHumans() }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <p class="text-muted">No recent complaints.</p>
-                    @endif --}}
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Jane Doe</strong>: Water leakage in apartment 4B.
+                            <span class="text-muted float-end">2 hours ago</span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>John Smith</strong>: Broken window in Block C.
+                            <span class="text-muted float-end">5 hours ago</span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Mary Johnson</strong>: No electricity in room 12.
+                            <span class="text-muted float-end">1 day ago</span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Ahmed Musa</strong>: Internet connectivity issues.
+                            <span class="text-muted float-end">2 days ago</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
