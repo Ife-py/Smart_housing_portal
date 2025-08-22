@@ -30,9 +30,40 @@
         }
 
         .footer {
-            background: #ffffff;
-            padding: 1.5rem 0;
-            border-top: 1px solid #dee2e6;
+            background: linear-gradient(90deg, #232526 0%, #414345 100%);
+            color: #f8f9fa;
+            padding: 2.5rem 0 1.2rem 0;
+            border-top: none;
+        }
+        .footer .footer-brand {
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+        .footer .footer-links a {
+            color: #b0b3b8;
+            margin: 0 0.7rem;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.18s;
+        }
+        .footer .footer-links a:hover {
+            color: #00bcd4;
+        }
+        .footer .footer-social a {
+            color: #b0b3b8;
+            margin: 0 0.4rem;
+            font-size: 1.3rem;
+            transition: color 0.18s;
+        }
+        .footer .footer-social a:hover {
+            color: #00bcd4;
+        }
+        .footer .footer-bottom {
+            color: #b0b3b8;
+            font-size: 0.95rem;
+            margin-top: 1.2rem;
         }
     </style>
 </head>
@@ -54,7 +85,7 @@
                         <a class="nav-link" href="{{ route('home.index') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">Browse Houses</a>
+                        <a class="nav-link" href="{{ route('home.properties') }}">Browse Houses</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('home.contact') }}">Contact</a>
@@ -99,9 +130,31 @@
     </main>
 
     {{-- Footer --}}
-    <footer class="footer text-center">
+    <footer class="footer mt-5">
         <div class="container">
-            <small>&copy; {{ date('Y') }} Smart Housing Portal. All rights reserved.</small>
+            <div class="row align-items-center mb-3">
+                <div class="col-md-4 text-md-start mb-3 mb-md-0">
+                    <span class="footer-brand">Smart Housing</span>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="footer-links">
+                        <a href="{{ route('home.index') }}">Home</a>
+                        <a href="{{ route('home.properties') }}">Browse Houses</a>
+                        <a href="{{ route('home.contact') }}">Contact</a>
+                    </div>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <div class="footer-social">
+                        <a href="#" title="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="#" title="Twitter"><i class="bi bi-twitter"></i></a>
+                        <a href="#" title="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom text-center">
+                &copy; {{ date('Y') }} Smart Housing Portal. All rights reserved.
+            </div>
         </div>
     </footer>
 

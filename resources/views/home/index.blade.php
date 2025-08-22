@@ -94,7 +94,7 @@
 		<div class="container">
 			<div class="d-flex justify-content-between align-items-center mb-4">
 				<h2 class="fw-bold mb-0"><i class="bi bi-building me-2 text-primary"></i>Recent Listings</h2>
-				<a href="#" class="btn btn-outline-primary btn-sm">Browse All Properties</a>
+				<a href="{{ route('home.properties') }}" class="btn btn-outline-primary btn-sm">Browse All Properties</a>
 			</div>
 			<div class="row g-4">
 				@foreach ([
