@@ -85,7 +85,7 @@ Route::controller(LoginController::class)->prefix('auth/login')->group(function 
     Route::post('/', 'login')->name('login.submit');
 });
 
-Route::prefix('dashboard/landlord')->name('dashboard.landlord.')->group(function(){
+Route::middleware('auth:landlord')->prefix('dashboard/landlord')->name('dashboard.landlord.')->group(function(){
     Route::controller(LandlordDashboardController::class)->group(function(){
         Route::get('/','index')->name('index');
     });
@@ -104,7 +104,9 @@ Route::prefix('dashboard/landlord')->name('dashboard.landlord.')->group(function
     });
 });
 
-Route::prefix('dashboard/tenant')->name('dashboard.tenant.')->group(function(){
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+
+Route::middleware('auth:tenant')->prefix('dashboard/tenant')->name('dashboard.tenant.')->group(function(){
     Route::controller(TenantDashboardController::class)->group(function(){
         Route::get('/','index')->name('index');
     });
