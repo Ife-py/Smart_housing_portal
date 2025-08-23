@@ -3,7 +3,7 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
 	<h2 class="fw-bold text-success mb-0"><i class="fa-solid fa-building me-2"></i> My Properties</h2>
-	<a href="#" class="btn btn-primary"><i class="fa fa-plus me-1"></i> Add New Property</a>
+	<a href="{{ route('dashboard.landlord.properties.create') }}" class="btn btn-primary"><i class="fa fa-plus me-1"></i> Add New Property</a>
 </div>
 
 <div class="card mb-4">
@@ -78,8 +78,8 @@
 				<td class="text-primary fw-semibold">{{ $property['price'] }}</td>
 				<td>{{ $property['date'] }}</td>
 				<td>
-					<a href="#" class="btn btn-sm btn-outline-info me-1" title="View"><i class="fa fa-eye"></i></a>
-					<a href="#" class="btn btn-sm btn-outline-warning me-1" title="Edit"><i class="fa fa-edit"></i></a>
+					<a href="" class="btn btn-sm btn-outline-info me-1" title="View"><i class="fa fa-eye"></i></a>
+					<a href="" class="btn btn-sm btn-outline-warning me-1" title="Edit"><i class="fa fa-edit"></i></a>
 					<a href="#" class="btn btn-sm btn-outline-danger" title="Delete"><i class="fa fa-trash"></i></a>
 				</td>
 			</tr>
