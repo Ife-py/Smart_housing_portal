@@ -1,4 +1,3 @@
-{{-- filepath: c:\Users\Ifeoluwa\Desktop\Smart_Housing_portal\resources\views\dashboard\landlord\properties\create.blade.php --}}
 @extends('Layout.landlord_dashboard')
 
 @section('title', 'Add New Property')
@@ -38,7 +37,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="type" class="form-label fw-semibold">Property Type</label>
-                            <select class="form-select" id="type" name="type" required>
+                            <select class="form-select" id="type" name="type" required onchange="toggleCustomType(this)">
                                 <option value="">Select type</option>
                                 <option value="Apartment">Apartment</option>
                                 <option value="Flat">Flat</option>
@@ -46,9 +45,23 @@
                                 <option value="Bungalow">Bungalow</option>
                                 <option value="Studio">Studio</option>
                                 <option value="Self-Contain">Self-Contain</option>
-                                <option value="Other">Other</option>
+                                <option value="Other">Other (specify below)</option>
                             </select>
+                            <input type="text" class="form-control mt-2 d-none" id="custom_type" name="custom_type" placeholder="Enter custom property type">
                         </div>
+                        <script>
+                        function toggleCustomType(select) {
+                            var customTypeInput = document.getElementById('custom_type');
+                            if (select.value === 'Other') {
+                                customTypeInput.classList.remove('d-none');
+                                customTypeInput.required = true;
+                            } else {
+                                customTypeInput.classList.add('d-none');
+                                customTypeInput.required = false;
+                                customTypeInput.value = '';
+                            }
+                        }
+                        </script>
                         <div class="mb-3">
                             <label for="description" class="form-label fw-semibold">Description</label>
                             <textarea class="form-control" id="description" name="description" rows="4" placeholder="Describe the property" required></textarea>
@@ -58,8 +71,17 @@
                             <input type="text" class="form-control" id="features" name="features" placeholder="e.g. Parking, Water, Security">
                         </div>
                         <div class="mb-3">
-                            <label for="image" class="form-label fw-semibold">Property Image</label>
-                            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                            <label for="images" class="form-label fw-semibold">Property Images</label>
+                            <input type="file" class="form-control" id="images" name="images[]" accept="image/*" multiple required>
+                            <div class="form-text">You can select multiple images. After upload, you will be able to choose a cover image.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cover_image" class="form-label fw-semibold">Cover Image</label>
+                            <select class="form-select" id="cover_image" name="cover_image">
+                                <option value="">Select cover image (after upload)</option>
+                                {{-- Dynamically populate this dropdown with uploaded images in edit mode or via JS after upload --}}
+                            </select>
+                            <div class="form-text">Choose which image will be the cover image for this property.</div>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mt-4">
                             <a href="{{ route('dashboard.landlord.properties.index') }}" class="btn btn-outline-secondary">

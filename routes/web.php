@@ -93,8 +93,8 @@ Route::middleware('auth:landlord')->prefix('dashboard/landlord')->name('dashboar
     Route::controller(PropertiesController::class)->prefix('/properties')->group(function(){
         Route::get('/','index')->name('properties.index');
         Route::get('/create','create')->name('properties.create');
-        Route::get('/{id}','show')->name('properties.show');
         Route::post('/store','store')->name('properties.store');
+        Route::get('/{id}','show')->name('properties.show');
         Route::get('/{id}/edit','edit')->name('properties.edit');
         Route::put('/{id}/update','update')->name('properties.update');
         Route::delete('/{id}/delete','destroy')->name('properties.delete');
