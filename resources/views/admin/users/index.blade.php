@@ -3,10 +3,6 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">Manage Users</h2>
-        <a href="#" class="btn btn-primary">Add New User</a>
-    </div>
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-body">
             <form class="row g-3">

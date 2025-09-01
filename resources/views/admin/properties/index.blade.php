@@ -4,7 +4,6 @@
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold text-primary"><i class="bi bi-house-door"></i> Manage Properties</h2>
-        <a href="#" class="btn btn-gradient px-4 py-2"><i class="bi bi-plus-circle me-1"></i> Add New Property</a>
     </div>
     <div class="row g-4 mb-4">
         <div class="col-md-4">
