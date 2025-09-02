@@ -11,7 +11,8 @@ use Illuminate\Support\Str;
 class PropertiesController extends Controller
 {
     public function index(){
-        return view('dashboard.landlord.properties.index');
+        $properties = Properties::where('landlord_id', Auth::guard('landlord')->id())->get();
+        return view('dashboard.landlord.properties.index', compact('properties'));
     }
 
     public function create(){
@@ -32,6 +33,7 @@ class PropertiesController extends Controller
             'images' => 'required',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:10240',
             'cover_image' => 'nullable|string',
+            'status' => 'active', // or $request->status if you want landlords to choose
         ]);
 
         $imagePaths = [];
@@ -77,8 +79,8 @@ class PropertiesController extends Controller
         return redirect()->route('dashboard.landlord.properties.index')->with('success', 'Property updated successfully.');
     }
     public function show($id){
-        // Fetch property by $id
-        return view('dashboard.landlord.properties.show', compact('id'));
+        $property = Properties::where('landlord_id', Auth::guard('landlord')->id())->get();
+        return view('dashboard.landlord.properties.show', compact('id','property'));
     }
 
     public function destroy($id){

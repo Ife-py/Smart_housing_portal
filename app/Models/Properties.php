@@ -20,6 +20,7 @@ class Properties extends Model
 		'features',
 		'images',
 		'cover_image',
+		'status',
 	];
 
 	protected $casts = [
@@ -31,4 +32,10 @@ class Properties extends Model
 	{
 		return $this->belongsTo(Landlord::class, 'landlord_id');
 	}
+	
+	public function isActive()
+	{
+		return strtolower($this->status) === 'active';
+	}
+
 }

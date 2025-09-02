@@ -69,33 +69,33 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ([
-            [
-                'img' => 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=80&q=80',
-                'title' => 'Modern 2 Bedroom Apartment',
-                'location' => 'Lekki, Lagos',
-                'status' => 'Active',
-                'price' => '₦1,200,000/year',
-                'date' => '2025-08-01',
-            ],
-            [
-                'img' => 'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=80&q=80',
-                'title' => 'Luxury Duplex',
-                'location' => 'Abuja, FCT',
-                'status' => 'Inactive',
-                'price' => '₦3,500,000/year',
-                'date' => '2025-07-15',
-            ],
-            [
-                'img' => 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=80&q=80',
-                'title' => 'Family Bungalow',
-                'location' => 'Port Harcourt, Rivers',
-                'status' => 'Active',
-                'price' => '₦2,000,000/year',
-                'date' => '2025-06-20',
-            ],
-        ] as $i => $property)
-                    <tr>
+                {{-- @foreach ([
+        [
+            'img' => 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=80&q=80',
+            'title' => 'Modern 2 Bedroom Apartment',
+            'location' => 'Lekki, Lagos',
+            'status' => 'Active',
+            'price' => '₦1,200,000/year',
+            'date' => '2025-08-01',
+        ],
+        [
+            'img' => 'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=80&q=80',
+            'title' => 'Luxury Duplex',
+            'location' => 'Abuja, FCT',
+            'status' => 'Inactive',
+            'price' => '₦3,500,000/year',
+            'date' => '2025-07-15',
+        ],
+        [
+            'img' => 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=80&q=80',
+            'title' => 'Family Bungalow',
+            'location' => 'Port Harcourt, Rivers',
+            'status' => 'Active',
+            'price' => '₦2,000,000/year',
+            'date' => '2025-06-20',
+        ],
+    ] as $i => $property) --}}
+                {{-- <tr>
                         <td>{{ $i + 1 }}</td>
                         <td><img src="{{ $property['img'] }}" alt="Property" class="rounded"
                                 style="width: 56px; height: 40px; object-fit: cover;"></td>
@@ -115,8 +115,61 @@
                             <a href="#" class="btn btn-sm btn-outline-danger" title="Delete"><i
                                     class="fa fa-trash"></i></a>
                         </td>
+                    </tr> --}}
+
+
+                @forelse ($properties as $i => $property)
+                    <tr>
+                        <td>{{ $i + 1 }}</td>
+                        <td>
+                            @if (!empty($property->images) && count($property->images) > 0)
+                                <img src="{{ asset('storage/' . $property->images[0]) }}" alt="Property" class="rounded"
+                                    style="width: 56px; height: 40px; object-fit: cover;">
+                            @else
+                                <img src="https://via.placeholder.com/56x40" alt="No Image" class="rounded">
+                            @endif
+                        </td>
+
+                        <td class="fw-semibold">{{ $property->title }}</td>
+                        <td>{{ $property->address }}, {{ $property->state }}</td>
+                        <td>
+                            @if (!empty($property->status))
+                                <span
+                                    class="badge bg-{{ strtolower($property->status) == 'active' ? 'success' : 'secondary' }}">
+                                    {{ ucfirst($property->status) }}
+                                </span>
+                            @else
+                                <span class="badge bg-secondary">Unknown</span>
+                            @endif
+                        </td>
+
+                        <td class="text-primary fw-semibold">₦{{ number_format($property->price) }}/year</td>
+                        <td>{{ $property->created_at->format('Y-m-d') }}</td>
+                        <td>
+                            <a href="{{ route('dashboard.landlord.properties.show', $property->id) }}"
+                                class="btn btn-sm btn-outline-info me-1" title="View">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a href="{{ route('dashboard.landlord.properties.edit', $property->id) }}"
+                                class="btn btn-sm btn-outline-warning me-1" title="Edit">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <form action="" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">No properties found</td>
+                    </tr>
+                @endforelse
+
+                {{-- @endforeach --}}
             </tbody>
         </table>
     </div>
