@@ -33,7 +33,7 @@
 				</div>
 				<div>
 					<div class="fw-semibold text-muted">My Properties</div>
-					<div class="fs-4 fw-bold">12</div>
+					<div class="fs-4 fw-bold">{{$property->count()}}</div>
 				</div>
 			</div>
 		</div>

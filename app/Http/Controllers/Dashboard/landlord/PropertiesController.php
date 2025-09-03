@@ -69,18 +69,26 @@ class PropertiesController extends Controller
         return redirect()->route('dashboard.landlord.properties.index')->with('success', 'Property created successfully.');
     }
 
-    // public function edit($id){
-    //     // Fetch property by $id
-    //     return view('dashboard.landlord.properties.edit', compact('id'));
-    // }  
+    public function edit($id){
+        // Fetch property by $id
+        $property = Properties::where('landlord_id', Auth::guard('landlord')->id())
+                              ->where('id', $id)
+                              ->with(['landlord'])
+                              ->firstOrFail();
+        return view('dashboard.landlord.properties.edit', compact('property'));
+    }  
 
     public function update(Request $request, $id){
         // Validate and update property logic here
         return redirect()->route('dashboard.landlord.properties.index')->with('success', 'Property updated successfully.');
     }
+    
     public function show($id){
-        $property = Properties::where('landlord_id', Auth::guard('landlord')->id())->get();
-        return view('dashboard.landlord.properties.show', compact('id','property'));
+        $property = Properties::where('landlord_id', Auth::guard('landlord')->id())
+                              ->where('id', $id)
+                              ->with(['landlord'])
+                              ->firstOrFail();
+        return view('dashboard.landlord.properties.show', compact('property'));
     }
 
     public function destroy($id){
