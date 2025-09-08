@@ -61,6 +61,7 @@ class PropertiesController extends Controller
             'state' => $request->state,
             'price' => $request->price,
             'type' => $propertyType,
+            'custom_type' => $request->type === 'Other' ? $request->custom_type : null,
             'description' => $request->description,
             'features' => $request->features,
             'images' => $imagePaths,
@@ -78,9 +79,69 @@ class PropertiesController extends Controller
         return view('dashboard.landlord.properties.edit', compact('property'));
     }  
 
-    public function update(Request $request, $id){
-        // Validate and update property logic here
-        return redirect()->route('dashboard.landlord.properties.index')->with('success', 'Property updated successfully.');
+public function update(Request $request, $id)
+{
+    // Find the property
+    $property = Properties::findOrFail($id);
+
+    // Validate input
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'address' => 'required|string|max:255',
+        'city' => 'required|string|max:100',
+        'state' => 'required|string|max:100',
+        'price' => 'required|numeric',
+        'type' => 'required|string|max:50',
+        'custom_type' => 'required_if:type,Other|nullable|string|max:50',
+        'description' => 'required|string',
+        'features' => 'nullable|string',
+        'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:10240',
+        'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
+        'status' => 'required|in:active,inactive',
+    ]);
+
+    // Update property fields
+    $property->title = $validated['title'];
+    $property->address = $validated['address'];
+    $property->city = $validated['city'];
+    $property->state = $validated['state'];
+    $property->price = $validated['price'];
+    $property->type = $validated['type'];
+    $property->custom_type = $validated['custom_type'] ?? null;
+    $property->description = $validated['description'];
+    $property->features = $validated['features'] ?? null;
+    $property->status = $validated['status'];
+
+    // Handle cover image upload (if provided)
+    if ($request->hasFile('cover_image')) {
+        // Delete old cover image if exists
+        if ($property->cover_image && Storage::exists('public/' . $property->cover_image)) {
+            Storage::delete('public/' . $property->cover_image);
+        }
+
+        $coverPath = $request->file('cover_image')->store('properties/cover_images', 'public');
+        $property->cover_image = $coverPath;
+    }
+
+    // Handle additional images (append new ones)
+    if ($request->hasFile('images')) {
+        $imagePaths = [];
+
+        foreach ($request->file('images') as $image) {
+            $path = $image->store('properties/images', 'public');
+            $imagePaths[] = $path;
+        }
+
+        // Merge old + new images
+        $existingImages = is_array($property->images) ? $property->images : [];
+        $property->images = array_merge($existingImages, $imagePaths);
+    }
+
+    // Save changes
+    $property->save();
+
+    return redirect()->route('dashboard.landlord.properties.index')
+                     ->with('success', 'Property updated successfully.');
     }
     
     public function show($id){
@@ -94,6 +155,42 @@ class PropertiesController extends Controller
     public function destroy($id){
         // Delete property logic here
         return redirect()->route('dashboard.landlord.properties.index')->with('success', 'Property deleted successfully.');
+    }
+    
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $property= collect();
+        $message=null;
+
+        if(!empty($query)){
+            $properties = Properties::where('landlord_id', Auth::guard('landlord')->id())
+            ->where(function ($q) use ($query) {
+                $q->where('title', 'LIKE', "%{$query}%")
+                  ->orWhere('address', 'LIKE', "%{$query}%")
+                  ->orWhere('city', 'LIKE', "%{$query}%")
+                  ->orWhere('state', 'LIKE', "%{$query}%")
+                  ->orWhere('type', 'LIKE', "%{$query}%")
+                  ->orWhere('description', 'LIKE', "%{$query}%")
+                  ->orWhere('features', 'LIKE', "%{$query}%")
+                  ->orWhere('custom_type', 'LIKE', "%{$query}%")
+                  ->orWhere('price', 'LIKE', "%{$query}%")
+                  ->orWhere('status', 'LIKE', "%{$query}%");
+            })
+            ->get();
+            if($properties->isEmpty()){
+                $message="No property found for your search query.";
+            }
+        }else{
+            $message="Please Enter a search term.";
+        }
+        
+
+        return view('dashboard.landlord.properties.index',
+         ['properties'=>$properties,
+            'searchQuery'=>$query,
+            'message'=>$message,
+        ]);
     }
 
 }

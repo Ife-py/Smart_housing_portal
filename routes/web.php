@@ -97,6 +97,7 @@ Route::middleware('auth:landlord')->prefix('dashboard/landlord')->name('dashboar
         Route::get('/{id}','show')->name('properties.show');
         Route::get('/{id}/edit','edit')->name('properties.edit');
         Route::put('/{id}/update','update')->name('properties.update');
+        Route::get('/search','search')->name('properties.search');
         Route::delete('/{id}/delete','destroy')->name('properties.delete');
     });
     Route::controller(SettingsController::class)->prefix('/settings')->group(function(){

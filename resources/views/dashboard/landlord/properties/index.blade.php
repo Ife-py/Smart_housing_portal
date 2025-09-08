@@ -35,22 +35,25 @@
 
     <div class="card mb-4">
         <div class="card-body">
-            <form class="row g-3 align-items-end">
+            <form action="{{ route('dashboard.landlord.properties.search') }}" method="GET" class="row g-3 align-items-end">
                 <div class="col-md-4">
-                    <input type="text" class="form-control" placeholder="Search by name, location, or status...">
+                    <input type="text" name="query" class="form-control"
+                        placeholder="Search by name, location, or status..." value="{{ request('query') }}">
                 </div>
                 <div class="col-md-2">
-                    <select class="form-select">
+                    <select name="status" class="form-select">
                         <option value="">All Status</option>
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-outline-success w-100"><i class="fa fa-search me-1"></i>
-                        Search</button>
+                    <button type="submit" class="btn btn-outline-success w-100">
+                        <i class="fa fa-search me-1"></i> Search
+                    </button>
                 </div>
             </form>
+
         </div>
     </div>
 
