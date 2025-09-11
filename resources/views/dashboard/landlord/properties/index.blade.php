@@ -35,7 +35,8 @@
 
     <div class="card mb-4">
         <div class="card-body">
-            <form action="{{ route('dashboard.landlord.properties.search') }}" method="GET" class="row g-3 align-items-end">
+            <form action="{{ route('dashboard.landlord.properties.search') }}" method="GET"
+                class="row g-3 align-items-end">
                 <div class="col-md-4">
                     <input type="text" name="query" class="form-control"
                         placeholder="Search by name, location, or status..." value="{{ request('query') }}">
@@ -43,8 +44,8 @@
                 <div class="col-md-2">
                     <select name="status" class="form-select">
                         <option value="">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
+                        <option value="active" @selected(request('status') == 'active')>Active</option>
+                        <option value="inactive" @selected(request('status') == 'inactive')>Inactive</option>
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -52,6 +53,14 @@
                         <i class="fa fa-search me-1"></i> Search
                     </button>
                 </div>
+                @if (request('query') || request('status'))
+                    <div class="col-md-2">
+                        <a href="{{ route('dashboard.landlord.properties.index') }}"
+                            class="btn btn-outline-secondary w-100">
+                            <i class="fa fa-times me-1"></i> Cancel
+                        </a>
+                    </div>
+                @endif
             </form>
 
         </div>
@@ -157,13 +166,36 @@
                                 class="btn btn-sm btn-outline-warning me-1" title="Edit">
                                 <i class="fa fa-edit"></i>
                             </a>
-                            <form action="" method="POST" class="d-inline">
+                            <form id="delete-form-{{ $property->id }}"
+                                action="{{ route('dashboard.landlord.properties.delete', $property->id) }}" method="POST"
+                                style="display:none;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
-                                    <i class="fa fa-trash"></i>
-                                </button>
                             </form>
+
+                            <button type="button" class="btn btn-danger" onclick="confirmDelete({{ $property->id }})">
+                                Delete
+                            </button>
+
+                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                            <script>
+                                function confirmDelete(id) {
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: "This property will be permanently deleted.",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#d33',
+                                        cancelButtonColor: '#3085d6',
+                                        confirmButtonText: 'Yes, delete it!'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.getElementById('delete-form-' + id).submit();
+                                        }
+                                    })
+                                }
+                            </script>
+
                         </td>
                     </tr>
                 @empty

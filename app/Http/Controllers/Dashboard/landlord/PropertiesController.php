@@ -152,8 +152,27 @@ public function update(Request $request, $id)
         return view('dashboard.landlord.properties.show', compact('property'));
     }
 
-    public function destroy($id){
-        // Delete property logic here
+       public function destroy($id)
+    {
+        $property = Properties::where('landlord_id', Auth::guard('landlord')->id())
+            ->where('id', $id)
+            ->firstOrFail();
+
+        // Delete cover image from storage
+        if ($property->cover_image) {
+            Storage::disk('public')->delete($property->cover_image);
+        }
+
+        // Delete all property images from storage
+        if (is_array($property->images)) {
+            foreach ($property->images as $imagePath) {
+                Storage::disk('public')->delete($imagePath);
+            }
+        }
+
+        // Delete the property from the database
+        $property->delete();
+
         return redirect()->route('dashboard.landlord.properties.index')->with('success', 'Property deleted successfully.');
     }
     
