@@ -97,44 +97,24 @@
 				<a href="{{ route('home.properties') }}" class="btn btn-outline-primary btn-sm">Browse All Properties</a>
 			</div>
 			<div class="row g-4">
-				@foreach ([
-					[
-						'title' => 'Modern 2 Bedroom Apartment',
-						'location' => 'Lekki, Lagos',
-						'price' => '₦1,200,000/year',
-						'img' => 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80',
-					],
-					[
-						'title' => 'Cozy Studio Flat',
-						'location' => 'Ikeja, Lagos',
-						'price' => '₦600,000/year',
-						'img' => 'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=400&q=80',
-					],
-					[
-						'title' => 'Luxury Duplex',
-						'location' => 'Abuja, FCT',
-						'price' => '₦3,500,000/year',
-						'img' => 'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=400&q=80',
-					],
-					[
-						'title' => 'Family Bungalow',
-						'location' => 'Port Harcourt, Rivers',
-						'price' => '₦2,000,000/year',
-						'img' => 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=400&q=80',
-					],
-				] as $property)
+				@forelse ($properties as $property)
 				<div class="col-md-6 col-lg-3">
 					<div class="card h-100 shadow-sm border-0 property-card">
-						<img src="{{ $property['img'] }}" class="card-img-top" alt="{{ $property['title'] }}" style="height: 180px; object-fit: cover;">
+						<img src="{{ $property->cover_image ? asset('storage/' . $property->cover_image) : (is_array($property->images) && count($property->images) > 0 ? asset('storage/' . $property->images[0]) : 'https://via.placeholder.com/400x180.png?text=No+Image') }}" class="card-img-top" alt="{{ $property->title }}" style="height: 180px; object-fit: cover;">
 						<div class="card-body">
-							<h5 class="card-title mb-1">{{ $property['title'] }}</h5>
-							<div class="text-muted small mb-2"><i class="bi bi-geo-alt-fill me-1"></i>{{ $property['location'] }}</div>
-							<div class="fw-semibold text-primary mb-2">{{ $property['price'] }}</div>
-							<a href="#" class="btn btn-outline-primary btn-sm w-100">View Details</a>
+							<h5 class="card-title mb-1">{{ $property->title }}</h5>
+							<div class="text-muted small mb-2"><i class="bi bi-geo-alt-fill me-1"></i>{{ $property->city }}, {{ $property->state }}</div>
+							<div class="fw-semibold text-primary mb-2">₦{{ number_format($property->price) }}/year</div>
+							<a href="{{ route('home.property.show', $property->id) }}" class="btn btn-outline-primary btn-sm w-100">View Details</a>
+							{{-- <a href="#" class="btn btn-outline-primary btn-sm w-100">View Details</a> --}}
 						</div>
 					</div>
 				</div>
-				@endforeach
+				@empty
+					<div class="col">
+						<p class="text-center text-muted">No recent properties found at the moment.</p>
+					</div>
+				@endforelse
 			</div>
 		</div>
 	</section>

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PropertyApplicationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LogoutController;
@@ -29,10 +30,13 @@ use App\Http\Controllers\Dashboard\Tenant\TenantPaymentController;
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home.index');
-    Route::get('/properties','properties')->name('home.properties');
+    Route::get('/properties', 'properties')->name('home.properties');
+    Route::get('/properties/{property}', 'show')->name('home.property.show');
     Route::get('/about', 'about')->name('home.about');
     Route::get('/contact', 'contact')->name('home.contact');
 });
+
+Route::post('/properties/{property}/apply', [PropertyApplicationController::class, 'apply'])->name('property.apply')->middleware('auth:tenant');
 
 Route::prefix('admin')->name('admin.')->group(function(){
     Route::controller(AdminController::class)->group(function () {

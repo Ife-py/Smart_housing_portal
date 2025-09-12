@@ -168,7 +168,7 @@
 							<h5 class="card-title mb-1">{{ $property['title'] }}</h5>
 							<div class="text-muted small mb-2"><i class="fa fa-map-marker-alt me-1"></i>{{ $property['location'] }}</div>
 							<div class="fw-semibold text-primary mb-2">{{ $property['price'] }}</div>
-							<a href="#" class="btn btn-outline-primary btn-sm w-100 quick-action-btn">View Details</a>
+							<a href="" class="btn btn-outline-primary btn-sm w-100 quick-action-btn">View Details</a>
 						</div>
 					</div>
 				</div>

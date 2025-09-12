@@ -24,71 +24,29 @@
 <div class="container py-4">
     <h2 class="fw-bold mb-4 text-info"><i class="fa fa-building me-2"></i>Available Properties</h2>
     <div class="row g-4">
-        @foreach ([
-            [
-                'title' => 'Modern 2 Bedroom Apartment',
-                'location' => 'Lekki, Lagos',
-                'price' => '₦4,500,000/year',
-                'img' => 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80',
-            ],
-            [
-                'title' => 'Cozy Studio Flat',
-                'location' => 'Ikeja, Lagos',
-                'price' => '₦2,800,000/year',
-                'img' => 'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=400&q=80',
-            ],
-            [
-                'title' => 'Luxury Duplex',
-                'location' => 'Abuja, FCT',
-                'price' => '₦12,000,000/year',
-                'img' => 'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=400&q=80',
-            ],
-            [
-                'title' => 'Family Bungalow',
-                'location' => 'Port Harcourt, Rivers',
-                'price' => '₦6,500,000/year',
-                'img' => 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=400&q=80',
-            ],
-            [
-                'title' => 'Penthouse Suite',
-                'location' => 'Victoria Island, Lagos',
-                'price' => '₦18,000,000/year',
-                'img' => 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
-            ],
-            [
-                'title' => 'Urban Loft',
-                'location' => 'Yaba, Lagos',
-                'price' => '₦3,200,000/year',
-                'img' => 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80',
-            ],
-            [
-                'title' => 'Classic Mansion',
-                'location' => 'GRA, Enugu',
-                'price' => '₦9,500,000/year',
-                'img' => 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=400&q=80',
-            ],
-            [
-                'title' => 'Waterfront Villa',
-                'location' => 'Banana Island, Lagos',
-                'price' => '₦25,000,000/year',
-                'img' => 'https://images.unsplash.com/photo-1460474647541-4edd0cd0c746?auto=format&fit=crop&w=400&q=80',
-            ],
-        ] as $property)
+        @forelse ($properties as $property)
         <div class="col-md-6 col-lg-4 col-xl-3">
             <div class="property-card h-100 border-0">
-                <img src="{{ $property['img'] }}" class="property-img" alt="{{ $property['title'] }}">
+                <a href="{{ route('home.property.show', $property) }}">
+                    <img src="{{ $property->cover_image ? asset('storage/' . $property->cover_image) : (is_array($property->images) && count($property->images) > 0 ? asset('storage/' . $property->images[0]) : 'https://via.placeholder.com/400x180.png?text=No+Image') }}" class="property-img" alt="{{ $property->title }}">
+                </a>
                 <div class="p-3">
-                    <h5 class="fw-bold mb-1">{{ $property['title'] }}</h5>
-                    <div class="text-muted small mb-2"><i class="fa fa-map-marker-alt me-1"></i>{{ $property['location'] }}</div>
-                    <div class="fw-semibold text-primary mb-2">{{ $property['price'] }}</div>
-                    <a href="#" class="btn btn-outline-info btn-sm w-100">View Details</a>
+                    <h5 class="fw-bold mb-1"><a href="{{ route('home.property.show', $property) }}" class="text-decoration-none text-dark">{{ $property->title }}</a></h5>
+                    <div class="text-muted small mb-2"><i class="fa fa-map-marker-alt me-1"></i>{{ $property->city }}, {{ $property->state }}</div>
+                    <div class="fw-semibold text-primary mb-2">₦{{ number_format($property->price) }}/year</div>
+                    <a href="{{ route('home.property.show', $property) }}" class="btn btn-outline-info btn-sm w-100">View Details</a>
                 </div>
             </div>
         </div>
-        @endforeach
+        @empty
+            <div class="col">
+                <p class="text-center text-muted">No properties found.</p>
+            </div>
+        @endforelse
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        {{ $properties->links() }}
     </div>
 </div>
 @endsection
-<div>
-    <!-- The best way to take care of the future is to take care of the present moment. - Thich Nhat Hanh -->
-</div>

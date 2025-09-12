@@ -2,26 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Properties;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        return view('home.index');
-    }
-    
-    public function properties(){
-        return view('home.properties');
-    }
-    
-    public function show_properties(){
-        return view('home.show_properties');
-    }
+        $recentProperties = Properties::where('status', 'active')
+                                      ->latest()
+                                      ->take(4)
+                                      ->get();
 
-    public function about()
+        return view('home.index', ['properties' => $recentProperties]);
+    }
+    
+    public function properties()
     {
-        return view('home.about');
+        $properties = Properties::where('status', 'active')
+                                ->latest()
+                                ->paginate(12);
+
+        return view('home.properties', ['properties' => $properties]);
+    }
+    
+    /**
+     * Show a single property.
+     *
+     * @param  \App\Models\Properties  $property
+     * @return \Illuminate\View\View
+     */
+    public function show(Properties $property)
+    {
+        // Ensure only active properties are shown publicly
+        if ($property->status !== 'active') {
+            abort(404);
+        }
+        return view('home.show', compact('property'));
     }
 
     public function contact()
