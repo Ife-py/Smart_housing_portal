@@ -20,6 +20,7 @@ class RegisterTenantsController extends Controller
             'username' => 'required|string|max:255|unique:tenants',
             'email' => 'required|string|email|max:255|unique:tenants',
             'phone' => 'nullable|string|max:15',
+            'sex'=> 'nullable|string|max:10',
             'address' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:100',
             'state' => 'nullable|string|max:100',
@@ -28,7 +29,7 @@ class RegisterTenantsController extends Controller
             'id_number' => 'nullable|string|max:50',
             'id_type' => 'nullable|string|max:50',
             'date_of_birth' => 'nullable|date|before:-18 years',
-            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
             'password' => 'required|string|min:8|confirmed',
         ]
         , ['date_of_birth.before' => 'You must be at least 18 years old to register.']
@@ -44,6 +45,7 @@ class RegisterTenantsController extends Controller
         $tenant->username = $request->username;
         $tenant->email = $request->email;
         $tenant->phone = $request->phone;
+        $tenant->sex = $request->sex;
         $tenant->address = $request->address;
         $tenant->city = $request->city;
         $tenant->state = $request->state;

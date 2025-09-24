@@ -27,6 +27,8 @@ use App\Http\Controllers\Dashboard\Tenant\TenantPropertiesController;
 use App\Http\Controllers\Dashboard\Tenant\TenantSettingsController;
 use App\Http\Controllers\Dashboard\Tenant\TenantMaintenanceController;
 use App\Http\Controllers\Dashboard\Tenant\TenantPaymentController;
+use App\Http\Controllers\Dashboard\Tenant\TenantProfileController;
+
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home.index');
@@ -142,5 +144,8 @@ Route::middleware('auth:tenant')->prefix('dashboard/tenant')->name('dashboard.te
     });
     Route::controller(TenantPaymentController::class)->prefix('/payments')->group(function(){
         Route::get('/','index')->name('payments.index');
+    });
+    Route::controller(TenantProfileController::class)->prefix('/profile')->group(function(){
+        Route::get('/','index')->name('profile.index');
     });
 });

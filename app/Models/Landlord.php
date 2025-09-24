@@ -15,6 +15,7 @@ class Landlord extends Authenticatable
         'username',
         'email',
         'phone',
+        'sex',
         'address',
         'city',
         'state',

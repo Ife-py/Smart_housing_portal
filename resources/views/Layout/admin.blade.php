@@ -6,10 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel | Smart Housing Portal</title>
 
+    <!-- Lightbox2 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet">
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
 
     <style>
         body {
@@ -69,6 +72,33 @@
             margin-right: 8px;
         }
 
+        /* Override Lightbox close button */
+        .lb-data .lb-close {
+            position: absolute !important;
+            top: -40px !important;
+            /* Move above the image */
+            right: -10px !important;
+            background: #fff !important;
+            border: 1px solid #ddd !important;
+            color: #000 !important;
+            font-size: 20px !important;
+            font-weight: bold !important;
+            line-height: 20px !important;
+            padding: 5px 10px !important;
+            border-radius: 50% !important;
+            opacity: 0.9 !important;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .lb-data .lb-close:hover {
+            background: #dc3545 !important;
+            /* Bootstrap danger red */
+            color: #fff !important;
+            opacity: 1 !important;
+            border-color: #dc3545 !important;
+        }
+
+
         @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
@@ -110,7 +140,7 @@
     <div class="sidebar d-flex flex-column flex-shrink-0 p-3">
         <ul class="nav nav-pills flex-column mb-auto">
             <li>
-            <a href="{{ route('admin.index') }}"
+                <a href="{{ route('admin.index') }}"
                     class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <i class="bi bi-speedometer2 icon"></i> Dashboard
                 </a>
@@ -161,6 +191,8 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
 </body>
 
 </html>

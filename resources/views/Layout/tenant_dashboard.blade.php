@@ -110,6 +110,11 @@
                         </a>
                     </li>
                     <li class="nav-item mb-1">
+                        <a class="nav-link @if(request()->routeIs('tenant.profile')) active @endif" href="{{ route('dashboard.tenant.profile.index') }}">
+                            <i class="fa-solid fa-user"></i> Profile Details
+                        </a>
+                    </li>
+                    <li class="nav-item mb-1">
                         <a class="nav-link @if(request()->routeIs('tenant.settings')) active @endif" href="{{ route('dashboard.tenant.settings.index') }}">
                             <i class="fa-solid fa-gear"></i> Settings
                         </a>
@@ -137,6 +142,11 @@
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('tenant.maintenance')) active @endif" href="{{ route('dashboard.tenant.maintenance.index') }}">
                             <i class="fa-solid fa-screwdriver-wrench"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(request()->routeIs('tenant.complaints')) active @endif" href="{{ route('dashboard.tenant.complaints.index') }}">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
                         </a>
                     </li>
                     <li class="nav-item">

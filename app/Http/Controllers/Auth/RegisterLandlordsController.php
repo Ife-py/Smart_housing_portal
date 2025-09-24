@@ -21,6 +21,7 @@ class RegisterLandlordsController extends Controller
             'username' => 'required|string|max:255|unique:landlords',
             'email' => 'required|string|email|max:255|unique:landlords',
             'phone' => 'nullable|string|max:15',
+            'sex' => 'nullable|string|max:10',
             'address' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:100',
             'state' => 'nullable|string|max:100',
@@ -32,7 +33,7 @@ class RegisterLandlordsController extends Controller
             'properties_count' => 'nullable|integer|min:0',
             'contact_method' => 'nullable|string|max:50',
             'date_of_birth' => 'nullable|date|before:-18 years',
-            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
             'password' => 'required|string|min:8|confirmed',
         ],
         ['date_of_birth.before' => 'You must be at least 18 years old to register.',]
@@ -49,6 +50,7 @@ class RegisterLandlordsController extends Controller
         $landlord->username = $request->username;
         $landlord->email = $request->email;
         $landlord->phone = $request->phone;
+        $landlord->sex = $request->sex;
         $landlord->address = $request->address;
         $landlord->city = $request->city;
         $landlord->state = $request->state;
