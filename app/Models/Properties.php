@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Application;
 
 class Properties extends Model
 {
@@ -38,4 +39,7 @@ class Properties extends Model
 		return strtolower($this->status) === 'active';
 	}
 
+	public function applications(){
+		return $this->hasMany(Application::class);
+	}
 }

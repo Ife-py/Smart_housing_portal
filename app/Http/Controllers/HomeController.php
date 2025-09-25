@@ -3,33 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Models\Properties;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Application;
 
 class HomeController extends Controller
 {
     public function index()
     {
         $recentProperties = Properties::where('status', 'active')
-                                      ->latest()
-                                      ->take(4)
-                                      ->get();
+            ->latest()
+            ->take(4)
+            ->get();
 
         return view('home.index', ['properties' => $recentProperties]);
     }
-    
+
     public function properties()
     {
         $properties = Properties::where('status', 'active')
-                                ->latest()
-                                ->paginate(12);
+            ->latest()
+            ->paginate(12);
 
         return view('home.properties', ['properties' => $properties]);
     }
-    
+
     /**
      * Show a single property.
      *
-     * @param  \App\Models\Properties  $property
      * @return \Illuminate\View\View
      */
     public function show(Properties $property)
@@ -38,7 +38,17 @@ class HomeController extends Controller
         if ($property->status !== 'active') {
             abort(404);
         }
-        return view('home.show', compact('property'));
+
+        $hasApplied = false;
+
+        if (Auth::guard('tenant')->check()) {
+            $tenantId = Auth::guard('tenant')->id();
+            $hasApplied = Application::where('tenant_id', $tenantId)
+                ->where('property_id', $property->id)
+                ->exists();
+        }
+
+        return view('home.show', compact('property','hasApplied'));
     }
 
     public function contact()

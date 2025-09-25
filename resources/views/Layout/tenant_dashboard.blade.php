@@ -54,7 +54,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="#">
+            <a class="navbar-brand fw-bold" href="{{ route('dashboard.tenant.index') }}">
                 <i class="fa-solid fa-shield-halved me-2 text-primary"></i> Tenant Panel
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
