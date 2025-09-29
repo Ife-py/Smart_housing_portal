@@ -115,32 +115,27 @@
                                 class="bi bi-telephone-fill me-2"></i> Call Landlord</a>
 
                         @auth('tenant')
+                            <!-- Tenant is logged in -->
                             @if ($hasApplied)
-                                <button type="button" class="btn btn-secondary w-100 fw-bold" disabled>
+                                <button class="btn btn-secondary w-100 fw-bold" disabled>
                                     <i class="bi bi-check-all me-2"></i> Application Sent
                                 </button>
                             @else
-                                <form action="{{ route('property.apply', $property->id) }}" method="POST">
+                                <form action="{{ route('property.apply', $property) }}" method="POST">
                                     @csrf
-                                    <!-- optional message -->
-                                    <div class="mb-2">
-                                        <textarea name="message" class="form-control" rows="3"
-                                            placeholder="Optional message to landlord (e.g. move-in date, brief intro)"></textarea>
-                                    </div>
-
                                     <button type="submit" class="btn btn-success w-100 fw-bold">
                                         <i class="bi bi-check2-circle me-2"></i> Apply Now
                                     </button>
                                 </form>
                             @endif
                         @else
-                            <!-- Not a tenant (guest or other guard) -->
-                            <a href="{{ route('auth.login', ['redirect' => url()->current()]) }}"
-                                class="btn btn-success w-100 fw-bold">
+                            <!-- Guest -->
+                            <a href="{{ route('auth.login') }}" class="btn btn-success w-100 fw-bold">
                                 <i class="bi bi-box-arrow-in-right me-2"></i> Login to Apply
                             </a>
                             <small class="d-block text-muted mt-2">You must be logged in as a tenant to apply.</small>
                         @endauth
+
                     </div>
                 </div>
             </div>
