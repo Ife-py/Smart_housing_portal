@@ -21,6 +21,7 @@ use App\Http\Controllers\Dashboard\Landlord\PaymentController;
 use App\Http\Controllers\Dashboard\Landlord\PropertiesController;
 use App\Http\Controllers\Dashboard\Landlord\SettingsController;
 use App\Http\Controllers\Dashboard\Landlord\TenantController;
+use App\Http\Controllers\Dashboard\Landlord\LandlordProfileController;
 use App\Http\Controllers\Dashboard\TenantDashboardController;
 use App\Http\Controllers\Dashboard\Tenant\TenantComplaintsController;
 use App\Http\Controllers\Dashboard\Tenant\TenantPropertiesController;
@@ -112,6 +113,12 @@ Route::middleware('auth:landlord')->prefix('dashboard/landlord')->name('dashboar
     Route::controller(TenantController::class)->prefix('/tenants')->group(function(){
         Route::get('/','index')->name('tenants.index');
     });
+
+    Route::controller(LandlordProfileController::class)->prefix('/profile')->group(function(){
+        Route::get('/','index')->name('profile.index');
+        Route::get('/edit','edit')->name('profile.edit');
+        Route::put('/{id}/update','update')->name('profile.update');
+    });
     Route::controller(ComplaintController::class)->prefix('/complaint')->group(function(){
         Route::get('/','index')->name('complaints.index');
     });
@@ -147,5 +154,7 @@ Route::middleware('auth:tenant')->prefix('dashboard/tenant')->name('dashboard.te
     });
     Route::controller(TenantProfileController::class)->prefix('/profile')->group(function(){
         Route::get('/','index')->name('profile.index');
+        Route::get('/edit','edit')->name('profile.edit');
+        Route::put('/{id}/update','update')->name('profile.update');
     });
 });

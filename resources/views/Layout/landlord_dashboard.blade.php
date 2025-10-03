@@ -24,49 +24,75 @@
         }
 
         .sidebar {
-            background: #f4f6fb;
-            color: #22223b;
+            background: #ffffff;
             min-height: 100vh;
-            padding-top: 2rem;
+            padding: 1.5rem 1rem;
             border-right: 1px solid #e5e7eb;
+            font-size: 0.95rem;
         }
 
         .sidebar .sidebar-header {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 2rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
             color: #198754;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar .nav-section {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: #6c757d;
+            font-weight: 600;
+            margin: 1rem 0 0.5rem 0.75rem;
         }
 
         .sidebar a {
-            color: #22223b;
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 10px 18px;
-            border-radius: 6px;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 8px;
             margin-bottom: 6px;
-            font-size: 1.05rem;
+            color: #374151;
             font-weight: 500;
-            transition: background 0.18s, color 0.18s;
+            transition: all 0.2s ease;
         }
 
-        .sidebar a.active,
+        .sidebar a i {
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+
         .sidebar a:hover {
-            background: #e9f5ee;
+            background: #f0fdf4;
             color: #198754;
             text-decoration: none;
+            transform: translateX(3px);
         }
 
-        .sidebar a:last-child {
+        .sidebar a.active {
+            background: #e9f5ee;
+            border-left: 4px solid #198754;
+            color: #198754;
+            font-weight: 600;
+            padding-left: 18px;
+        }
+
+        .sidebar a.logout {
             margin-top: 2rem;
             color: #dc3545;
+            font-weight: 600;
         }
 
-        .sidebar a:last-child:hover {
+        .sidebar a.logout:hover {
             background: #f8d7da;
             color: #dc3545;
+            transform: translateX(3px);
         }
+
 
         .content-wrapper {
             padding: 40px 30px 30px 30px;
@@ -165,17 +191,23 @@
             </div>
             <!-- Desktop Sidebar -->
             <nav class="col-md-2 d-none d-md-block sidebar">
-                <div class="sidebar-header text-center mb-4">
+                <div class="sidebar-header text-center">
                     <i class="fa-solid fa-house-user me-2"></i> Landlord
                 </div>
+
+                <div class="nav-section">Main</div>
                 <a href="{{ route('dashboard.landlord.index') }}"
                     class="{{ request()->routeIs('landlord.dashboard') ? 'active' : '' }}">
                     <i class="fa-solid fa-gauge"></i> Dashboard
                 </a>
+
+                <div class="nav-section">Properties</div>
                 <a href="{{ route('dashboard.landlord.properties.index') }}"
                     class="{{ request()->routeIs('landlord.properties') ? 'active' : '' }}">
                     <i class="fa-solid fa-building"></i> Manage Properties
                 </a>
+
+                <div class="nav-section">Management</div>
                 <a href="{{ route('dashboard.landlord.tenants.index') }}"
                     class="{{ request()->routeIs('landlord.tenants') ? 'active' : '' }}">
                     <i class="fa-solid fa-users"></i> Tenants
@@ -184,17 +216,27 @@
                     class="{{ request()->routeIs('landlord.complaints') ? 'active' : '' }}">
                     <i class="fa-solid fa-triangle-exclamation"></i> Complaints
                 </a>
+
+                <div class="nav-section">Settings</div>
                 <a href="{{ route('dashboard.landlord.settings.index') }}"
                     class="{{ request()->routeIs('landlord.settings') ? 'active' : '' }}">
                     <i class="fa-solid fa-gear"></i> Settings
                 </a>
-                <a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <li class="nav-item mb-1">
+                        <a class="nav-link @if(request()->routeIs('landlord.profile')) active @endif" href="{{ route('dashboard.landlord.profile.index') }}">
+                            <i class="fa-solid fa-user"></i> Profile Details
+                        </a>
+                </li>
+
+                <a href="" class="logout"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="fa-solid fa-right-from-bracket"></i> Logout
                 </a>
-                <form id="logout-form" action="" method="POST" class="d-none">
+                <form id="logout-form" action="{{ route('dashboard.landlord.logout') }}" method="POST" class="d-none">
                     @csrf
                 </form>
             </nav>
+
             <main class="col-md-10 ms-sm-auto col-lg-10 content-wrapper">
                 <div class="card shadow-sm">
                     <div class="card-body">
