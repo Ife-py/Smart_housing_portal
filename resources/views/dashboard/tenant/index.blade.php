@@ -211,7 +211,7 @@
             <div class="dashboard-card border-0">
                 <div class="fw-bold mb-3 fs-5 d-flex justify-content-between align-items-center">
                     <span><i class="fa-solid fa-building me-2 text-primary"></i>Recently Listed Properties</span>
-                    <a href="{{ route('home.properties') }}"
+                    <a href="{{ route('dashboard.tenant.properties.index') }}"
                         class="btn btn-outline-primary btn-sm quick-action-btn">
                         Browse All
                     </a>
@@ -241,7 +241,7 @@
                                             ₦{{ number_format($property->price, 2) }}
                                         </div>
                                     </div>
-                                    <a href="{{ route('home.property.show', $property->id) }}"
+                                    <a href="{{ route('dashboard.tenant.properties.show', $property->id) }}"
                                         class="btn btn-outline-primary btn-sm w-100 quick-action-btn mt-2">
                                         View Details
                                     </a>

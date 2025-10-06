@@ -90,7 +90,7 @@
                         </a>
                     </li>
                     <li class="nav-item mb-1">
-                        <a class="nav-link @if(request()->routeIs('tenant.properties')) active @endif" href="{{ route('dashboard.tenant.properties.index') }}">
+                        <a class="nav-link @if(request()->routeIs('tenant.properties')) active @endif" href="{{ route('dashboard.tenant.my_properties.index') }}">
                             <i class="fa-solid fa-building"></i> My Properties
                         </a>
                     </li>
@@ -130,7 +130,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('tenant.properties')) active @endif" href="{{ route('dashboard.tenant.properties.index') }}">
+                        <a class="nav-link @if(request()->routeIs('tenant.my_properties')) active @endif" href="{{ route('dashboard.tenant.my_properties.index') }}">
                             <i class="fa-solid fa-building"></i>
                         </a>
                     </li>

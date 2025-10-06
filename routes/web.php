@@ -1,4 +1,4 @@
-<?php
+\<?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PropertyApplicationController;
@@ -25,6 +25,7 @@ use App\Http\Controllers\Dashboard\Landlord\LandlordProfileController;
 use App\Http\Controllers\Dashboard\TenantDashboardController;
 use App\Http\Controllers\Dashboard\Tenant\TenantComplaintsController;
 use App\Http\Controllers\Dashboard\Tenant\TenantPropertiesController;
+use App\Http\Controllers\Dashboard\Tenant\MyPropertiesContoller;
 use App\Http\Controllers\Dashboard\Tenant\TenantSettingsController;
 use App\Http\Controllers\Dashboard\Tenant\TenantMaintenanceController;
 use App\Http\Controllers\Dashboard\Tenant\TenantPaymentController;
@@ -131,14 +132,19 @@ Route::middleware('auth:tenant')->prefix('dashboard/tenant')->name('dashboard.te
         Route::get('/','index')->name('index');
     });
     Route::post('/logout',[LogoutController::class,'logout'])->name('logout');
-    Route::controller(TenantPropertiesController::class)->prefix('/properties')->group(function(){
+    Route::controller(MyPropertiesController::class)->prefix('/my_properties')->group(function(){
+        Route::get('/','index')->name('my_properties.index');
+        Route::get('/{id}','show')->name('my_properties.show');
+        Route::get('/create','create')->name('my_properties.create');
+        Route::post('/store','store')->name('my_properties.store');
+        Route::get('/{id}/edit','edit')->name('my_properties.edit');
+        Route::put('/{id}/update','update')->name('my_properties.update');
+        Route::delete('/{id}/delete','destroy')->name('my_properties.delete');
+    });
+
+    Route::controller(TenantPropertiesController::class)->prefix('properties')->group(function(){
         Route::get('/','index')->name('properties.index');
-        Route::get('/{id}','show')->name('properties.show');
-        Route::get('/create','create')->name('properties.create');
-        Route::post('/store','store')->name('properties.store');
-        Route::get('/{id}/edit','edit')->name('properties.edit');
-        Route::put('/{id}/update','update')->name('properties.update');
-        Route::delete('/{id}/delete','destroy')->name('properties.delete');
+        Route::get('/{id}/show','show')->name('properties.show');
     });
     Route::controller(TenantSettingsController::class)->prefix('/settings')->group(function(){
         Route::get('/','index')->name('settings.index');
