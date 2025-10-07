@@ -15,7 +15,39 @@
 
         .navbar {
             background: #fff;
-            box-shadow: 0 2px 8px rgba(44, 62, 80, 0.07);
+            box-shadow: 0 4px 24px rgba(44, 62, 80, 0.07);
+            border-bottom: 1px solid #e3e8ee;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            color: #198754 !important;
+            letter-spacing: 1px;
+        }
+        .navbar .nav-link, .navbar .dropdown-toggle {
+            color: #4e5d6c !important;
+            font-weight: 500;
+            font-size: 1.05rem;
+        }
+        .navbar .nav-link:hover, .navbar .dropdown-toggle:hover {
+            color: #00bcd4 !important;
+        }
+        .notification-bell {
+            position: relative;
+            font-size: 1.35rem;
+            color: #607d8b;
+            cursor: pointer;
+        }
+        .notification-bell .badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            font-size: 0.7rem;
+            background: #ff5252;
+            color: #fff;
+        }
+        .dropdown-menu-notifications {
+            min-width: 320px;
+            max-width: 350px;
         }
 
         .navbar .navbar-brand,
@@ -138,9 +170,29 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="d-flex align-items-center">
-                <span class="profile-name fw-semibold me-2">{{ Auth::user()->name ?? 'Landlord' }}</span>
-                <img src="{{ Auth::user()->profile_photo ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name ?? 'Landlord') }}"
-                    alt="Profile" class="profile-img">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link notification-bell" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-bell"></i>
+                            <span class="badge">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-notifications shadow" aria-labelledby="notificationDropdown">
+                            <li class="dropdown-header fw-bold">Notifications</li>
+                            <li><a class="dropdown-item" href="#"><i class="fa fa-envelope text-primary me-2"></i> New tenant application</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fa fa-file-contract text-success me-2"></i> Lease signed for Apartment 2B</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fa fa-tools text-warning me-2"></i> Maintenance request received</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-center text-muted" href="#">View all notifications</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <span class="profile-name fw-semibold me-2">{{ Auth::user()->name ?? 'Landlord' }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <img src="{{ Auth::user()->profile_photo ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name ?? 'Landlord') }}"
+                            alt="Profile" class="profile-img">
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>

@@ -8,7 +8,13 @@ use App\Models\Properties;
 
 class MyPropertiesController extends Controller
 {
-    public function index(){
-        return view('dashboard.tenant.my_properties.index');
+    public function index()
+    {
+        $tenantId = auth()->guard('tenant')->id();
+        $applications = \App\Models\Application::with('property', 'landlord')
+            ->where('tenant_id', $tenantId)
+            ->get();
+
+        return view('dashboard.tenant.my_properties.index', compact('applications'));
     }
 }

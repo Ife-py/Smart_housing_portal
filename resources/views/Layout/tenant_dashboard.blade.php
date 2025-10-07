@@ -54,13 +54,14 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="{{ route('dashboard.tenant.index') }}">
+            <a class="navbar-brand fw-bold" href="#">
                 <i class="fa-solid fa-shield-halved me-2 text-primary"></i> Tenant Panel
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="adminNavbar">
+            <div class="collapse na
+            vbar-collapse" id="adminNavbar">
                 <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item">
                         <span class="nav-link fw-semibold">{{ Auth::user()->name ?? 'Tenant' }}</span>
@@ -90,8 +91,8 @@
                         </a>
                     </li>
                     <li class="nav-item mb-1">
-                        <a class="nav-link @if(request()->routeIs('tenant.properties')) active @endif" href="{{ route('dashboard.tenant.my_properties.index') }}">
-                            <i class="fa-solid fa-building"></i> My Properties
+                        <a class="nav-link @if(request()->routeIs('tenant.properties')) active @endif" href="{{ route('dashboard.tenant.properties.index') }}">
+            my_                <i class="fa-solid fa-building"></i> My Properties
                         </a>
                     </li>
                     <li class="nav-item mb-1">
@@ -130,8 +131,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('tenant.my_properties')) active @endif" href="{{ route('dashboard.tenant.my_properties.index') }}">
-                            <i class="fa-solid fa-building"></i>
+                        <a class="nav-link @if(request()->routeIs('tenant.properties')) active @endif" href="{my_{ route('dashboard.tenant.properties.index') }}">
+            my_                <i class="fa-solid fa-building"></i>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -168,3 +169,6 @@
     @stack('scripts')
 </body>
 </html>
+
+
+

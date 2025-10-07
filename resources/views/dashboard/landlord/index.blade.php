@@ -21,6 +21,7 @@
 			<div class="text-muted">Here's a quick overview of your properties and activities.</div>
 		</div>
 	</div>
+
 </div>
 
 <!-- Dashboard Cards -->

@@ -24,8 +24,8 @@ use App\Http\Controllers\Dashboard\Landlord\TenantController;
 use App\Http\Controllers\Dashboard\Landlord\LandlordProfileController;
 use App\Http\Controllers\Dashboard\TenantDashboardController;
 use App\Http\Controllers\Dashboard\Tenant\TenantComplaintsController;
+use App\Http\Controllers\Dashboard\Tenant\MyPropertiesController;
 use App\Http\Controllers\Dashboard\Tenant\TenantPropertiesController;
-use App\Http\Controllers\Dashboard\Tenant\MyPropertiesContoller;
 use App\Http\Controllers\Dashboard\Tenant\TenantSettingsController;
 use App\Http\Controllers\Dashboard\Tenant\TenantMaintenanceController;
 use App\Http\Controllers\Dashboard\Tenant\TenantPaymentController;
@@ -163,4 +163,6 @@ Route::middleware('auth:tenant')->prefix('dashboard/tenant')->name('dashboard.te
         Route::get('/edit','edit')->name('profile.edit');
         Route::put('/{id}/update','update')->name('profile.update');
     });
+    Route::post('/properties/{property}/apply', [PropertyApplicationController::class, 'apply'])
+        ->name('property.apply');
 });
