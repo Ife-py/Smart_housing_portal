@@ -98,7 +98,7 @@
 						<span class="badge bg-success float-end">Resolved</span>
 					</li>
 				</ul>
-				<a href="#" class="btn btn-link mt-2 p-0">View all complaints <i class="fa fa-arrow-right"></i></a>
+				<a href="{{ route('dashboard.landlord.complaints.index') }}" class="btn btn-link mt-2 p-0">View all complaints <i class="fa fa-arrow-right"></i></a>
 			</div>
 		</div>
 	</div>
@@ -108,9 +108,9 @@
 				Quick Actions
 			</div>
 			<div class="card-body">
-				<a href="#" class="btn btn-success mb-2 w-100"><i class="fa fa-plus me-1"></i> Add New Property</a>
-				<a href="#" class="btn btn-outline-info mb-2 w-100"><i class="fa fa-users me-1"></i> View Tenants</a>
-				<a href="#" class="btn btn-outline-warning w-100"><i class="fa fa-triangle-exclamation me-1"></i> View Complaints</a>
+				<a href="{{ route('dashboard.landlord.properties.create') }}" class="btn btn-success mb-2 w-100"><i class="fa fa-plus me-1"></i> Add New Property</a>
+				<a href="{{ route('dashboard.landlord.tenants.index') }}" class="btn btn-outline-info mb-2 w-100"><i class="fa fa-users me-1"></i> View Tenants</a>
+				<a href="{{ route('dashboard.landlord.complaints.index') }}" class="btn btn-outline-warning w-100"><i class="fa fa-triangle-exclamation me-1"></i> View Complaints</a>
 			</div>
 		</div>
 	</div>
