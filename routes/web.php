@@ -22,6 +22,8 @@ use App\Http\Controllers\Dashboard\Landlord\PropertiesController;
 use App\Http\Controllers\Dashboard\Landlord\SettingsController;
 use App\Http\Controllers\Dashboard\Landlord\TenantController;
 use App\Http\Controllers\Dashboard\Landlord\LandlordProfileController;
+use App\Http\Controllers\Dashboard\Landlord\LandlordNotificationController;
+use App\Http\Controllers\Dashboard\Landlord\ApplicationController;
 use App\Http\Controllers\Dashboard\TenantDashboardController;
 use App\Http\Controllers\Dashboard\Tenant\TenantComplaintsController;
 use App\Http\Controllers\Dashboard\Tenant\MyPropertiesController;
@@ -107,6 +109,16 @@ Route::middleware('auth:landlord')->prefix('dashboard/landlord')->name('dashboar
         Route::get('/{id}/edit','edit')->name('properties.edit');
         Route::put('/{id}/update','update')->name('properties.update');
         Route::delete('/{id}/delete','destroy')->name('properties.delete');
+    });
+    Route::controller(ApplicationController::class)->prefix('/application')->group(function(){
+        Route::get('/','index')->name('application.index');
+        Route::get('/{id}/show','show')->name('application.show');
+        Route::post('/{id}/accept','accept')->name('application.accept');
+        Route::post('/{id}/decline','decline')->name('application.decline');
+        Route::post('/{id}/cancel','cancel')->name('application.cancel');
+    });
+    Route::controller(LandlordNotificationController::class)->prefix('/notifications')->group(function(){
+        Route::get('/','index')->name('notifications.index');
     });
     Route::controller(SettingsController::class)->prefix('/settings')->group(function(){
         Route::get('/','index')->name('settings.index');

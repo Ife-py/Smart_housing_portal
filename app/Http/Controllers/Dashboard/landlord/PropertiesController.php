@@ -11,7 +11,13 @@ use Illuminate\Support\Str;
 class PropertiesController extends Controller
 {
     public function index(){
-        $properties = Properties::where('landlord_id', Auth::guard('landlord')->id())->get();
+        // include a count of pending applications for each property
+        $properties = Properties::where('landlord_id', Auth::guard('landlord')->id())
+            ->withCount(['applications as pending_applications_count' => function($q){
+                $q->where('status', 'pending');
+            }])
+            ->get();
+
         return view('dashboard.landlord.properties.index', compact('properties'));
     }
 

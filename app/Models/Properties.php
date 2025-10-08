@@ -40,6 +40,7 @@ class Properties extends Model
 	}
 
 	public function applications(){
-		return $this->hasMany(Application::class);
+		// explicitly specify foreign key 'property_id' to avoid incorrect pluralized column
+		return $this->hasMany(Application::class, 'property_id');
 	}
 }

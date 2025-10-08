@@ -162,7 +162,7 @@
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand d-flex align-items-center" href="#">
+            <a class="navbar-brand d-flex align-items-center" href="{{ route('dashboard.landlord.index') }}">
                 <i class="fa-solid fa-house-user me-2"></i> Smart Housing Portal
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas"
@@ -182,7 +182,7 @@
                             <li><a class="dropdown-item" href="#"><i class="fa fa-file-contract text-success me-2"></i> Lease signed for Apartment 2B</a></li>
                             <li><a class="dropdown-item" href="#"><i class="fa fa-tools text-warning me-2"></i> Maintenance request received</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-center text-muted" href="#">View all notifications</a></li>
+                            <li><a class="dropdown-item text-center text-muted" href="{{ route('dashboard.landlord.notifications.index') }}">View all notifications</a></li>
                         </ul>
                     </li>
                     <li class="nav-item ms-3">
@@ -300,4 +300,5 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')
-</body
+</body>
+</html>
