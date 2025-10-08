@@ -9,7 +9,7 @@
                 <div class="card shadow-sm border-0">
                     <div class="card-body">
                         <h5 class="card-title">Total Users</h5>
-                        <p class="card-text fs-4 fw-semibold">1,234</p>
+                        <p class="card-text fs-4 fw-semibold">{{ $totalUsers}}</p>
                     </div>
                 </div>
             </div>
@@ -17,7 +17,7 @@
                 <div class="card shadow-sm border-0">
                     <div class="card-body">
                         <h5 class="card-title">Landlords</h5>
-                        <p class="card-text fs-4 fw-semibold">312</p>
+                        <p class="card-text fs-4 fw-semibold">{{ $landlords->count() }}</p>
                     </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                 <div class="card shadow-sm border-0">
                     <div class="card-body">
                         <h5 class="card-title">Tenants</h5>
-                        <p class="card-text fs-4 fw-semibold">780</p>
+                        <p class="card-text fs-4 fw-semibold">{{ $tenants->count() }}</p>
                     </div>
                 </div>
             </div>
@@ -33,7 +33,7 @@
                 <div class="card shadow-sm border-0">
                     <div class="card-body">
                         <h5 class="card-title">Properties Listed</h5>
-                        <p class="card-text fs-4 fw-semibold">98</p>
+                        <p class="card-text fs-4 fw-semibold">{{ $properties->count() }}</p>
                     </div>
                 </div>
             </div>
