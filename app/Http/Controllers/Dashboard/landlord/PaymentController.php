@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class PaymentController extends Controller
 {
     public function index(){
-        return view ('dashboard.landlord.complaints.index');
+        return view ('dashboard.landlord.payment.index');
     }
 }

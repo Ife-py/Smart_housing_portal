@@ -50,13 +50,13 @@ $dummyApplications = [
     (object)[
         'property' => (object)['title' => 'Cozy Studio', 'address' => '456 Elm St'],
         'landlord' => (object)['name' => 'Jane Smith'],
-        'status' => 'approved',
+        'status' => 'accepted',
         'lease_end' => '2025-12-31',
     ],
     (object)[
         'property' => (object)['title' => 'Modern Flat', 'address' => '789 Oak Ave'],
         'landlord' => (object)['name' => 'Mike Johnson'],
-        'status' => 'rejected',
+        'status' => 'cancelled',
         'lease_end' => null,
     ],
 ];
@@ -96,9 +96,9 @@ foreach($dummyApplications as $dummy) {
                 <td>
                     @php
                         $badge = 'secondary';
-                        if(strtolower($application->status) == 'approved') $badge = 'success';
+                        if(strtolower($application->status) == 'accepted') $badge = 'success';
                         elseif(strtolower($application->status) == 'pending') $badge = 'warning';
-                        elseif(strtolower($application->status) == 'rejected') $badge = 'danger';
+                        elseif(strtolower($application->status) == 'cancelled') $badge = 'danger';
                     @endphp
                     <span class="badge bg-{{ $badge }}">{{ ucfirst($application->status) }}</span>
                 </td>
@@ -109,11 +109,11 @@ foreach($dummyApplications as $dummy) {
                         <a href="#" class="btn btn-sm btn-outline-danger ms-2" title="Withdraw Application">
                             <i class="fa fa-times"></i> Withdraw
                         </a>
-                    @elseif(strtolower($application->status) == 'approved')
+                    @elseif(strtolower($application->status) == 'accepted')
                         <a href="#" class="btn btn-sm btn-outline-info me-1" title="View Lease"><i class="fa fa-file-contract"></i> Lease</a>
                         <a href="#" class="btn btn-sm btn-outline-primary me-1" title="Contact Landlord"><i class="fa fa-envelope"></i> Contact</a>
                         <a href="#" class="btn btn-sm btn-outline-warning" title="Request Maintenance"><i class="fa fa-tools"></i> Maintenance</a>
-                    @elseif(strtolower($application->status) == 'rejected')
+                    @elseif(strtolower($application->status) == 'cancelled')
                         <span class="text-danger">Application Rejected</span>
                     @endif
                 </td>

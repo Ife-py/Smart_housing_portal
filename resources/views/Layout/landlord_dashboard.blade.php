@@ -222,6 +222,10 @@
                             class="{{ request()->routeIs('landlord.tenants') ? 'active' : '' }}">
                             <i class="fa-solid fa-users"></i> Tenants
                         </a>
+                        <a href="{{ route('dashboard.landlord.payments.index') }}"
+                            class="{{ request()->routeIs('landlord.payment') ? 'active' : '' }}">
+                            <i class="fa-solid fa-credit-card"></i> Payment
+                        </a>
                         <a href="{{ route('dashboard.landlord.complaints.index') }}"
                             class="{{ request()->routeIs('landlord.complaints') ? 'active' : '' }}">
                             <i class="fa-solid fa-triangle-exclamation"></i> Complaints
@@ -269,7 +273,11 @@
                     class="{{ request()->routeIs('landlord.complaints') ? 'active' : '' }}">
                     <i class="fa-solid fa-triangle-exclamation"></i> Complaints
                 </a>
-
+                <a href="{{ route('dashboard.landlord.payments.index') }}"
+                    class="{{ request()->routeIs('landlord.payment') ? 'active' : '' }}">
+                    <i class="fa-solid fa-credit-card"></i> Payment
+                </a>
+                
                 <div class="nav-section">Settings</div>
                 <a href="{{ route('dashboard.landlord.settings.index') }}"
                     class="{{ request()->routeIs('landlord.settings') ? 'active' : '' }}">

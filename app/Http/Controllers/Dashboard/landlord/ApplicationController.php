@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Application;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Payment;
 
 class ApplicationController extends Controller
 {
@@ -23,7 +24,31 @@ class ApplicationController extends Controller
     {
         $app = Application::findOrFail($id);
         $app->update(['status' => 'accepted']);
-        return back()->with('success', 'Application accepted.');
+
+        // Create a dummy payment record and associate with the application
+        try {
+            $amount = 0;
+            if ($app->property && isset($app->property->price)) {
+                $amount = $app->property->price;
+            }
+
+            $reference = 'PAY-' . strtoupper(bin2hex(random_bytes(4)));
+
+            $payment = Payment::create([
+                'application_id' => $app->id,
+                'tenant_id' => $app->tenant_id,
+                'landlord_id' => $app->landlord_id,
+                'property_id' => $app->property_id,
+                'amount' => $amount,
+                'reference' => $reference,
+                'status' => 'pending',
+            ]);
+        } catch (\Exception $e) {
+            // If payment creation fails, still return success for acceptance
+            return back()->with('success', 'Application accepted. (Payment creation failed)');
+        }
+
+        return redirect()->route('dashboard.landlord.application.show', $app->id)->with('success', 'Application accepted and payment created.');
     }
 
     public function decline($id)

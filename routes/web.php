@@ -29,9 +29,9 @@ use App\Http\Controllers\Dashboard\Tenant\TenantComplaintsController;
 use App\Http\Controllers\Dashboard\Tenant\MyPropertiesController;
 use App\Http\Controllers\Dashboard\Tenant\TenantPropertiesController;
 use App\Http\Controllers\Dashboard\Tenant\TenantSettingsController;
-use App\Http\Controllers\Dashboard\Tenant\TenantMaintenanceController;
 use App\Http\Controllers\Dashboard\Tenant\TenantPaymentController;
 use App\Http\Controllers\Dashboard\Tenant\TenantProfileController;
+use App\Http\Controllers\Dashboard\Tenant\TenantNotificationController;
 
 
 Route::controller(HomeController::class)->group(function () {
@@ -120,6 +120,9 @@ Route::middleware('auth:landlord')->prefix('dashboard/landlord')->name('dashboar
     Route::controller(LandlordNotificationController::class)->prefix('/notifications')->group(function(){
         Route::get('/','index')->name('notifications.index');
     });
+     Route::controller(PaymentController::class)->prefix('/payment')->group(function(){
+        Route::get('/','index')->name('payments.index');
+    });
     Route::controller(SettingsController::class)->prefix('/settings')->group(function(){
         Route::get('/','index')->name('settings.index');
     });
@@ -164,16 +167,19 @@ Route::middleware('auth:tenant')->prefix('dashboard/tenant')->name('dashboard.te
     Route::controller(TenantComplaintsController::class)->prefix('/complaints')->group(function(){
         Route::get('/','index')->name('complaints.index');
     });
-    Route::controller(TenantMaintenanceController::class)->prefix('/maintenance')->group(function(){
-        Route::get('/','index')->name('maintenance.index');
-    });
     Route::controller(TenantPaymentController::class)->prefix('/payments')->group(function(){
         Route::get('/','index')->name('payments.index');
+        Route::get('/{id}','show')->name('payments.show');
+        Route::post('/{id}/pay','pay')->name('payments.pay');
     });
     Route::controller(TenantProfileController::class)->prefix('/profile')->group(function(){
         Route::get('/','index')->name('profile.index');
         Route::get('/edit','edit')->name('profile.edit');
         Route::put('/{id}/update','update')->name('profile.update');
+    });
+    // Tenant notifications
+    Route::controller(TenantNotificationController::class)->prefix('/notifications')->group(function(){
+        Route::get('/','index')->name('notifications.index');
     });
     Route::post('/properties/{property}/apply', [PropertyApplicationController::class, 'apply'])
         ->name('property.apply');

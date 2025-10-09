@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Payment;
 
 class Application extends Model
 {
@@ -30,5 +31,10 @@ class Application extends Model
     public function landlord()
     {
         return $this->belongsTo(Landlord::class, 'landlord_id');
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class, 'application_id');
     }
 }

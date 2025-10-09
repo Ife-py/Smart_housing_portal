@@ -54,7 +54,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="#">
+            <a class="navbar-brand fw-bold" href="{{ route('dashboard.tenant.index') }}">
                 <i class="fa-solid fa-shield-halved me-2 text-primary"></i> Tenant Panel
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,6 +62,46 @@
             </button>
             <div class="collapse navbar-collapse" id="adminNavbar">
                 <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item dropdown me-2">
+                        @php
+                            $tenantId = Auth::guard('tenant')->id() ?? Auth::id();
+                            try {
+                                $unreadCount = \App\Models\Application::where('tenant_id', $tenantId)->where('status', 'pending')->count();
+                                $preview = \App\Models\Application::where('tenant_id', $tenantId)->where('status', 'pending')->latest()->limit(3)->get();
+                            } catch (\Exception $e) {
+                                $unreadCount = 0;
+                                $preview = collect();
+                            }
+                        @endphp
+
+                        <a class="nav-link dropdown-toggle position-relative" href="#" id="tenantNotificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-bell" style="font-size:1.2rem;color:#607d8b"></i>
+                            @if($unreadCount > 0)
+                                <span class="badge bg-danger position-absolute" style="top:6px;right:6px;font-size:0.65rem">{{ $unreadCount }}</span>
+                            @endif
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow dropdown-menu-notifications" aria-labelledby="tenantNotificationDropdown" style="min-width:320px;">
+                            <li class="dropdown-header fw-bold">Notifications</li>
+                            @if($preview->isEmpty())
+                                <li class="dropdown-item text-muted">No new notifications</li>
+                            @else
+                                @foreach($preview as $app)
+                                    <li class="dropdown-item d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <div class="fw-semibold">{{ $app->property->title ?? 'Property' }}</div>
+                                            <div class="small text-muted">{{ Str::limit($app->message, 60) }}</div>
+                                            <div class="small text-muted">{{ $app->created_at->diffForHumans() }}</div>
+                                        </div>
+                                        <div class="ms-2">
+                                            <a href="{{ route('dashboard.tenant.notifications.index') }}" class="btn btn-sm btn-outline-primary">Open</a>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            @endif
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-center text-muted" href="{{ route('dashboard.tenant.notifications.index') }}">View all notifications</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item">
                         <span class="nav-link fw-semibold">{{ Auth::user()->name ?? 'Tenant' }}</span>
                     </li>
@@ -100,11 +140,6 @@
                         </a>
                     </li>
                     <li class="nav-item mb-1">
-                        <a class="nav-link @if(request()->routeIs('tenant.maintenance')) active @endif" href="{{ route('dashboard.tenant.maintenance.index') }}">
-                            <i class="fa-solid fa-screwdriver-wrench"></i> Maintenance
-                        </a>
-                    </li>
-                    <li class="nav-item mb-1">
                         <a class="nav-link @if(request()->routeIs('tenant.complaints')) active @endif" href="{{ route('dashboard.tenant.complaints.index') }}">
                             <i class="fa-solid fa-triangle-exclamation"></i> Complaints
                         </a>
@@ -137,11 +172,6 @@
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('tenant.payments')) active @endif" href="{{ route('dashboard.tenant.payments.index') }}">
                             <i class="fa-solid fa-credit-card"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('tenant.maintenance')) active @endif" href="{{ route('dashboard.tenant.maintenance.index') }}">
-                            <i class="fa-solid fa-screwdriver-wrench"></i>
                         </a>
                     </li>
                     <li class="nav-item">
