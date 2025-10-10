@@ -79,6 +79,9 @@
                             @csrf
                             <button class="btn btn-danger">Cancel</button>
                         </form>
+                        @if(isset($application->payment) && $application->payment)
+                            <a href="{{ route('dashboard.tenant.payments.show', $application->payment->id) }}" class="btn btn-outline-primary ms-2">View Payment</a>
+                        @endif
                     @endif
                 </div>
             </div>

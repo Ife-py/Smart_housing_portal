@@ -11,7 +11,9 @@ class TenantPaymentController extends Controller
 {
     public function index()
     {
-        return view('dashboard.tenant.payment.index');
+        $tenantId = Auth::guard('tenant')->id() ?? Auth::id();
+        $payments = Payment::with('property')->where('tenant_id', $tenantId)->latest()->get();
+        return view('dashboard.tenant.payment.index', compact('payments'));
     }
 
     public function show($id)

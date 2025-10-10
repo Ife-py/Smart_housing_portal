@@ -52,34 +52,62 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach ([
-				[
-					'property' => 'Sunset Villa',
-					'reference' => 'INV-20250801-001',
-					'amount' => '₦500,000',
-					'status' => 'Paid',
-					'date' => '2025-08-01',
-				],
-				[
-					'property' => 'Greenwood Apartments',
-					'reference' => 'INV-20250701-002',
-					'amount' => '₦400,000',
-					'status' => 'Pending',
-					'date' => '2025-07-01',
-				],
-				[
-					'property' => 'Oceanview Flats',
-					'reference' => 'INV-20250601-003',
-					'amount' => '₦350,000',
-					'status' => 'Overdue',
-					'date' => '2025-06-01',
-				],
-			] as $i => $payment)
+			@forelse($payments as $i => $payment)
+			<tr>
+				<td>{{ $i+1 }}</td>
+				<td class="fw-semibold">{{ $payment->property->title ?? 'Property' }}</td>
+				<td>{{ $payment->reference }}</td>
+				<td>₦{{ number_format($payment->amount, 2) }}</td>
+				<td>
+					@php
+						$status = strtolower($payment->status ?? 'pending');
+						$badge = 'secondary';
+						if($status == 'paid') $badge = 'success';
+						elseif($status == 'pending') $badge = 'warning';
+						elseif($status == 'overdue') $badge = 'danger';
+					@endphp
+					<span class="badge bg-{{ $badge }}">{{ ucfirst($payment->status) }}</span>
+				</td>
+				<td>{{ $payment->created_at->format('Y-m-d') }}</td>
+				<td>
+					<a href="{{ route('dashboard.tenant.payments.show', $payment->id) }}" class="btn btn-sm btn-outline-info me-1" title="View"><i class="fa fa-receipt"></i></a>
+					@if(strtolower($payment->status) != 'paid')
+						<a href="{{ route('dashboard.tenant.payments.show', $payment->id) }}" class="btn btn-sm btn-outline-primary" title="Pay Now"><i class="fa fa-credit-card"></i></a>
+					@endif
+				</td>
+			</tr>
+			@empty
+			@php
+				$dummyPayments = [
+					[
+						'property' => 'Sunset Villa',
+						'reference' => 'INV-20250801-001',
+						'amount' => '500000',
+						'status' => 'Paid',
+						'date' => '2025-08-01',
+					],
+					[
+						'property' => 'Greenwood Apartments',
+						'reference' => 'INV-20250701-002',
+						'amount' => '400000',
+						'status' => 'Pending',
+						'date' => '2025-07-01',
+					],
+					[
+						'property' => 'Oceanview Flats',
+						'reference' => 'INV-20250601-003',
+						'amount' => '350000',
+						'status' => 'Overdue',
+						'date' => '2025-06-01',
+					],
+				];
+			@endphp
+			@foreach($dummyPayments as $i => $payment)
 			<tr>
 				<td>{{ $i+1 }}</td>
 				<td class="fw-semibold">{{ $payment['property'] }}</td>
 				<td>{{ $payment['reference'] }}</td>
-				<td>{{ $payment['amount'] }}</td>
+				<td>₦{{ number_format($payment['amount'], 2) }}</td>
 				<td>
 					@php
 						$badge = 'secondary';
@@ -91,13 +119,14 @@
 				</td>
 				<td>{{ $payment['date'] }}</td>
 				<td>
-					<a href="#" class="btn btn-sm btn-outline-info me-1" title="View Receipt"><i class="fa fa-receipt"></i></a>
+					<a href="#" class="btn btn-sm btn-outline-info me-1" title="View"><i class="fa fa-receipt"></i></a>
 					@if(strtolower($payment['status']) != 'paid')
 						<a href="#" class="btn btn-sm btn-outline-primary" title="Pay Now"><i class="fa fa-credit-card"></i></a>
 					@endif
 				</td>
 			</tr>
 			@endforeach
+			@endforelse
 		</tbody>
 	</table>
 </div>
