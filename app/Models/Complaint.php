@@ -4,31 +4,31 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Payment;
+use App\Models\Tenant;
+use App\Models\Landlord;
+use App\Models\Properties;
 
-class Application extends Model
+class Complaint extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'property_id',
         'tenant_id',
         'landlord_id',
+        'property_id',
+        'subject',
+        'description',
         'status',
-        'message',
+        'attachments',
         'is_read_by_landlord',
         'is_read_by_tenant',
     ];
 
     protected $casts = [
+        'attachments' => 'array',
         'is_read_by_landlord' => 'boolean',
         'is_read_by_tenant' => 'boolean',
     ];
-
-    public function property()
-    {
-        return $this->belongsTo(Properties::class, 'property_id');
-    }
 
     public function tenant()
     {
@@ -40,8 +40,8 @@ class Application extends Model
         return $this->belongsTo(Landlord::class, 'landlord_id');
     }
 
-    public function payment()
+    public function property()
     {
-        return $this->hasOne(Payment::class, 'application_id');
+        return $this->belongsTo(Properties::class, 'property_id');
     }
 }

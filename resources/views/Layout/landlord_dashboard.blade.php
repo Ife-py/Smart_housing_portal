@@ -173,15 +173,63 @@
             <div class="d-flex align-items-center">
                 <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item dropdown">
+                        @php
+                            $landlordId = Auth::guard('landlord')->id() ?? Auth::id();
+                            // unresolved applications: pending or accepted (landlord attention)
+                            $attentionApps = \App\Models\Application::where('landlord_id', $landlordId)
+                                ->whereIn('status', ['pending', 'accepted'])
+                                ->where('is_read_by_landlord', false)
+                                ->orderBy('created_at', 'desc')
+                                ->get();
+
+                            // unresolved complaints: status != resolved and unread by landlord
+                            $openComplaints = \App\Models\Complaint::where('landlord_id', $landlordId)
+                                ->where('status', '!=', 'resolved')
+                                ->where('is_read_by_landlord', false)
+                                ->orderBy('created_at', 'desc')
+                                ->get();
+
+                            // count items that require attention
+                            $unreadCount = $attentionApps->count() + $openComplaints->count();
+
+                            // prepare preview (top 3 recent items)
+                            $unreadItems = $attentionApps->concat($openComplaints)->sortByDesc('created_at')->values()->take(3);
+                        @endphp
+
                         <a class="nav-link notification-bell" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-bell"></i>
-                            <span class="badge">3</span>
+                            @if($unreadCount > 0)
+                                <span class="badge">{{ $unreadCount }}</span>
+                            @endif
                         </a>
+
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-notifications shadow" aria-labelledby="notificationDropdown">
                             <li class="dropdown-header fw-bold">Notifications</li>
-                            <li><a class="dropdown-item" href="#"><i class="fa fa-envelope text-primary me-2"></i> New tenant application</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fa fa-file-contract text-success me-2"></i> Lease signed for Apartment 2B</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fa fa-tools text-warning me-2"></i> Maintenance request received</a></li>
+                            @if($unreadItems->isEmpty())
+                                <li><div class="dropdown-item text-muted">No new notifications</div></li>
+                            @else
+                                @foreach($unreadItems as $item)
+                                    @if(isset($item->subject) && isset($item->description))
+                                        {{-- complaint --}}
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('dashboard.landlord.complaints.show', $item->id) }}">
+                                                <i class="fa fa-triangle-exclamation text-danger me-2"></i>
+                                                {{ \Illuminate\Support\Str::limit($item->subject, 60) }}
+                                                <div class="small text-muted">Complaint • {{ optional($item->property)->title ?? 'Property' }}</div>
+                                            </a>
+                                        </li>
+                                    @else
+                                        {{-- application --}}
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('dashboard.landlord.application.show', $item->id) }}">
+                                                <i class="fa fa-envelope text-primary me-2"></i>
+                                                {{ optional($item->tenant)->name ?? 'Applicant' }} • {{ optional($item->property)->title ?? 'Property' }}
+                                                <div class="small text-muted">Status: {{ ucfirst($item->status) }}</div>
+                                            </a>
+                                        </li>
+                                    @endif
+                                @endforeach
+                            @endif
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-center text-muted" href="{{ route('dashboard.landlord.notifications.index') }}">View all notifications</a></li>
                         </ul>

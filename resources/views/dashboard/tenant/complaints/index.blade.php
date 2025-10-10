@@ -16,7 +16,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
 	<h2 class="fw-bold text-primary mb-0"><i class="fa-solid fa-triangle-exclamation me-2"></i> My Complaints</h2>
-	<a href="#" class="btn btn-primary"><i class="fa fa-plus me-1"></i> New Complaint</a>
+	<a href="{{ route('dashboard.tenant.complaints.create') }}" class="btn btn-primary"><i class="fa fa-plus me-1"></i> New Complaint</a>
 </div>
 
 <div class="complaint-card mb-4 p-3">
@@ -50,40 +50,25 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach ([
-				[
-					'subject' => 'Leaking Roof',
-					'desc' => 'There is a leak in the master bedroom roof.',
-					'status' => 'Open',
-					'date' => '2025-08-15',
-				],
-				[
-					'subject' => 'No Water Supply',
-					'desc' => 'Water supply has been inconsistent for 3 days.',
-					'status' => 'Resolved',
-					'date' => '2025-08-10',
-				],
-				[
-					'subject' => 'Broken Window',
-					'desc' => 'The kitchen window is broken and needs repair.',
-					'status' => 'Open',
-					'date' => '2025-08-05',
-				],
-			] as $i => $complaint)
+			@forelse($complaints as $i => $complaint)
 			<tr>
 				<td>{{ $i+1 }}</td>
-				<td class="fw-semibold">{{ $complaint['subject'] }}</td>
-				<td class="text-truncate" style="max-width: 200px;">{{ $complaint['desc'] }}</td>
+				<td class="fw-semibold">{{ $complaint->subject }}</td>
+				<td class="text-truncate" style="max-width: 200px;">{{ Str::limit($complaint->description, 80) }}</td>
 				<td>
-					<span class="badge bg-{{ strtolower($complaint['status']) == 'open' ? 'primary' : 'success' }}">{{ $complaint['status'] }}</span>
+					<span class="badge bg-{{ strtolower($complaint->status) == 'open' ? 'primary' : 'success' }}">{{ ucfirst($complaint->status) }}</span>
 				</td>
-				<td>{{ $complaint['date'] }}</td>
+				<td>{{ $complaint->created_at->format('Y-m-d') }}</td>
 				<td>
-					<a href="#" class="btn btn-sm btn-outline-info me-1" title="View"><i class="fa fa-eye"></i></a>
+					<a href="{{ route('dashboard.tenant.complaints.show', $complaint->id) }}" class="btn btn-sm btn-outline-info me-1" title="View"><i class="fa fa-eye"></i></a>
 					<a href="#" class="btn btn-sm btn-outline-danger" title="Delete"><i class="fa fa-trash"></i></a>
 				</td>
 			</tr>
-			@endforeach
+			@empty
+			<tr>
+				<td colspan="6" class="text-center">You have not filed any complaints yet.</td>
+			</tr>
+			@endforelse
 		</tbody>
 	</table>
 </div>

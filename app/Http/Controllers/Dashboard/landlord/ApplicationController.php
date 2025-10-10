@@ -65,6 +65,12 @@ class ApplicationController extends Controller
             ->where('id', $id)
             ->firstOrFail();
 
+        // mark as read for landlord
+        if (! $application->is_read_by_landlord) {
+            $application->is_read_by_landlord = true;
+            $application->save();
+        }
+
         return view('dashboard.landlord.applications.show', compact('application'));
     }
 

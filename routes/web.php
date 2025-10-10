@@ -137,6 +137,8 @@ Route::middleware('auth:landlord')->prefix('dashboard/landlord')->name('dashboar
     });
     Route::controller(ComplaintController::class)->prefix('/complaint')->group(function(){
         Route::get('/','index')->name('complaints.index');
+        Route::get('/{id}/show','show')->name('complaints.show');
+        Route::post('/{id}/resolve','resolve')->name('complaints.resolve');
     });
 });
 
@@ -166,6 +168,9 @@ Route::middleware('auth:tenant')->prefix('dashboard/tenant')->name('dashboard.te
     });
     Route::controller(TenantComplaintsController::class)->prefix('/complaints')->group(function(){
         Route::get('/','index')->name('complaints.index');
+        Route::get('/create','create')->name('complaints.create');
+        Route::post('/store','store')->name('complaints.store');
+        Route::get('/{id}/show','show')->name('complaints.show');
     });
     Route::controller(TenantPaymentController::class)->prefix('/payments')->group(function(){
         Route::get('/','index')->name('payments.index');

@@ -3,7 +3,7 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
 	<h2 class="fw-bold text-danger mb-0"><i class="fa-solid fa-triangle-exclamation me-2"></i> Complaints</h2>
-	<a href="#" class="btn btn-primary"><i class="fa fa-plus me-1"></i> New Complaint</a>
+	{{-- landlord-initiated complaint creation not implemented yet --}}
 </div>
 
 <div class="card mb-4">
@@ -40,45 +40,31 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach ([
-				[
-					'tenant' => 'Emeka O.',
-					'subject' => 'Leaking Roof',
-					'desc' => 'There is a leak in the master bedroom roof.',
-					'status' => 'Open',
-					'date' => '2025-08-15',
-				],
-				[
-					'tenant' => 'Aisha B.',
-					'subject' => 'No Water Supply',
-					'desc' => 'Water supply has been inconsistent for 3 days.',
-					'status' => 'Resolved',
-					'date' => '2025-08-10',
-				],
-				[
-					'tenant' => 'Chinedu K.',
-					'subject' => 'Broken Window',
-					'desc' => 'The kitchen window is broken and needs repair.',
-					'status' => 'Open',
-					'date' => '2025-08-05',
-				],
-			] as $i => $complaint)
+			@forelse($complaints as $i => $complaint)
 			<tr>
 				<td>{{ $i+1 }}</td>
-				<td class="fw-semibold">{{ $complaint['tenant'] }}</td>
-				<td>{{ $complaint['subject'] }}</td>
-				<td class="text-truncate" style="max-width: 200px;">{{ $complaint['desc'] }}</td>
+				<td class="fw-semibold">{{ optional($complaint->tenant)->name ?? 'Tenant #' . ($complaint->tenant_id ?? '') }}</td>
+				<td>{{ $complaint->subject }}</td>
+				<td class="text-truncate" style="max-width: 200px;">{{ Str::limit($complaint->description, 80) }}</td>
 				<td>
-					<span class="badge bg-{{ strtolower($complaint['status']) == 'open' ? 'danger' : 'success' }}">{{ $complaint['status'] }}</span>
+					<span class="badge bg-{{ strtolower($complaint->status) == 'open' ? 'danger' : 'success' }}">{{ ucfirst($complaint->status) }}</span>
 				</td>
-				<td>{{ $complaint['date'] }}</td>
+				<td>{{ $complaint->created_at->format('Y-m-d') }}</td>
 				<td>
-					<a href="#" class="btn btn-sm btn-outline-info me-1" title="View"><i class="fa fa-eye"></i></a>
-					<a href="#" class="btn btn-sm btn-outline-success me-1" title="Mark as Resolved"><i class="fa fa-check"></i></a>
-					<a href="#" class="btn btn-sm btn-outline-danger" title="Delete"><i class="fa fa-trash"></i></a>
+					<a href="{{ route('dashboard.landlord.complaints.show', $complaint->id) }}" class="btn btn-sm btn-outline-info me-1" title="View"><i class="fa fa-eye"></i></a>
+					@if(strtolower($complaint->status) !== 'resolved')
+						<form action="{{ route('dashboard.landlord.complaints.resolve', $complaint->id) }}" method="post" class="d-inline">
+							@csrf
+							<button type="submit" class="btn btn-sm btn-outline-success me-1" title="Mark as Resolved"><i class="fa fa-check"></i></button>
+						</form>
+					@endif
 				</td>
 			</tr>
-			@endforeach
+			@empty
+			<tr>
+				<td colspan="7" class="text-center">No complaints have been submitted yet.</td>
+			</tr>
+			@endforelse
 		</tbody>
 	</table>
 </div>

@@ -66,8 +66,22 @@
                         @php
                             $tenantId = Auth::guard('tenant')->id() ?? Auth::id();
                             try {
-                                $unreadCount = \App\Models\Application::where('tenant_id', $tenantId)->where('status', 'pending')->count();
-                                $preview = \App\Models\Application::where('tenant_id', $tenantId)->where('status', 'pending')->latest()->limit(3)->get();
+                                // attention applications for tenant (pending or accepted) and unread by tenant
+                                $attentionApps = \App\Models\Application::where('tenant_id', $tenantId)
+                                    ->whereIn('status', ['pending', 'accepted'])
+                                    ->where('is_read_by_tenant', false)
+                                    ->orderBy('created_at', 'desc')
+                                    ->get();
+
+                                // open complaints for tenant (not resolved) and unread by tenant
+                                $openComplaints = \App\Models\Complaint::where('tenant_id', $tenantId)
+                                    ->where('status', '!=', 'resolved')
+                                    ->where('is_read_by_tenant', false)
+                                    ->orderBy('created_at', 'desc')
+                                    ->get();
+
+                                $unreadCount = $attentionApps->count() + $openComplaints->count();
+                                $preview = $attentionApps->concat($openComplaints)->sortByDesc('created_at')->values()->take(3);
                             } catch (\Exception $e) {
                                 $unreadCount = 0;
                                 $preview = collect();
@@ -85,17 +99,32 @@
                             @if($preview->isEmpty())
                                 <li class="dropdown-item text-muted">No new notifications</li>
                             @else
-                                @foreach($preview as $app)
-                                    <li class="dropdown-item d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <div class="fw-semibold">{{ $app->property->title ?? 'Property' }}</div>
-                                            <div class="small text-muted">{{ Str::limit($app->message, 60) }}</div>
-                                            <div class="small text-muted">{{ $app->created_at->diffForHumans() }}</div>
-                                        </div>
-                                        <div class="ms-2">
-                                            <a href="{{ route('dashboard.tenant.notifications.index') }}" class="btn btn-sm btn-outline-primary">Open</a>
-                                        </div>
-                                    </li>
+                                @foreach($preview as $item)
+                                    @if(isset($item->subject) && isset($item->description))
+                                        {{-- complaint --}}
+                                        <li class="dropdown-item d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <div class="fw-semibold">{{ \Illuminate\Support\Str::limit($item->subject, 60) }}</div>
+                                                <div class="small text-muted">{{ optional($item->property)->title ?? 'Property' }}</div>
+                                                <div class="small text-muted">{{ $item->created_at->diffForHumans() }}</div>
+                                            </div>
+                                            <div class="ms-2">
+                                                <a href="{{ route('dashboard.tenant.complaints.index') }}" class="btn btn-sm btn-outline-primary">Open</a>
+                                            </div>
+                                        </li>
+                                    @else
+                                        {{-- application --}}
+                                        <li class="dropdown-item d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <div class="fw-semibold">{{ optional($item->property)->title ?? 'Property' }}</div>
+                                                <div class="small text-muted">{{ Str::limit($item->message ?? '', 60) }}</div>
+                                                <div class="small text-muted">Status: {{ ucfirst($item->status) }} • {{ $item->created_at->diffForHumans() }}</div>
+                                            </div>
+                                            <div class="ms-2">
+                                                <a href="{{ route('dashboard.tenant.notifications.index') }}" class="btn btn-sm btn-outline-primary">Open</a>
+                                            </div>
+                                        </li>
+                                    @endif
                                 @endforeach
                             @endif
                             <li><hr class="dropdown-divider"></li>
