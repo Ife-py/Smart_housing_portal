@@ -1,7 +1,5 @@
 @extends('Layout.landlord_dashboard')
-
 @section('content')
-
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="fa fa-check-circle me-2"></i> {{ session('success') }}
@@ -69,13 +67,44 @@
     <div class="table-responsive">
         <style>
             /* Local styles for a cleaner properties table */
-            .properties-table img.prop-thumb{ width:72px; height:48px; object-fit:cover; border-radius:6px; }
-            .properties-table tbody tr{ transition: background .12s ease; }
-            .properties-table tbody tr:hover{ background: rgba(0,0,0,0.02); }
-            .action-btn{ width:34px; height:34px; padding:0; display:inline-flex; align-items:center; justify-content:center; }
-            .badge-pending{ background:#ff6b6b; color:#fff; }
-            .badge-unknown{ background:#6c757d; color:#fff; }
-            .table-sm th, .table-sm td{ vertical-align:middle; }
+            .properties-table img.prop-thumb {
+                width: 72px;
+                height: 48px;
+                object-fit: cover;
+                border-radius: 6px;
+            }
+
+            .properties-table tbody tr {
+                transition: background .12s ease;
+            }
+
+            .properties-table tbody tr:hover {
+                background: rgba(0, 0, 0, 0.02);
+            }
+
+            .action-btn {
+                width: 34px;
+                height: 34px;
+                padding: 0;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .badge-pending {
+                background: #ff6b6b;
+                color: #fff;
+            }
+
+            .badge-unknown {
+                background: #6c757d;
+                color: #fff;
+            }
+
+            .table-sm th,
+            .table-sm td {
+                vertical-align: middle;
+            }
         </style>
 
         <table class="table table-hover align-middle properties-table table-sm">
@@ -147,10 +176,10 @@
                         <td>{{ $i + 1 }}</td>
                         <td>
                             @if (!empty($property->images) && count($property->images) > 0)
-                                <img src="{{ asset('storage/' . $property->images[0]) }}" alt="Property" class="prop-thumb"
-                                    >
+                                <img src="{{ asset('storage/' . $property->images[0]) }}" alt="Property" class="prop-thumb">
                             @else
-                                <img src="https://via.placeholder.com/72x48?text=No+Image" alt="No Image" class="prop-thumb">
+                                <img src="https://via.placeholder.com/72x48?text=No+Image" alt="No Image"
+                                    class="prop-thumb">
                             @endif
                         </td>
 
@@ -171,18 +200,22 @@
 
                         <td>
                             @php $pending = $property->pending_applications_count ?? 0; @endphp
-                            <a href="{{ route('dashboard.landlord.application.index', ['property_id' => $property->id]) }}" class="d-inline-flex align-items-center">
-                                <span class="badge {{ $pending>0 ? 'badge-pending' : 'badge-unknown' }}">{{ $pending }}</span>
+                            <a href="{{ route('dashboard.landlord.application.index', ['property_id' => $property->id]) }}"
+                                class="d-inline-flex align-items-center">
+                                <span
+                                    class="badge {{ $pending > 0 ? 'badge-pending' : 'badge-unknown' }}">{{ $pending }}</span>
                                 <small class="ms-2 text-muted">view</small>
                             </a>
                         </td>
 
                         <td>{{ $property->created_at->format('Y-m-d') }}</td>
                         <td>
-                            <a href="{{ route('dashboard.landlord.properties.show', $property->id) }}" class="btn btn-outline-info btn-sm action-btn me-1" title="View">
+                            <a href="{{ route('dashboard.landlord.properties.show', $property->id) }}"
+                                class="btn btn-outline-info btn-sm action-btn me-1" title="View">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a href="{{ route('dashboard.landlord.properties.edit', $property->id) }}" class="btn btn-outline-warning btn-sm action-btn me-1" title="Edit">
+                            <a href="{{ route('dashboard.landlord.properties.edit', $property->id) }}"
+                                class="btn btn-outline-warning btn-sm action-btn me-1" title="Edit">
                                 <i class="fa fa-edit"></i>
                             </a>
                             <form id="delete-form-{{ $property->id }}"

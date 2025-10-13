@@ -1,7 +1,5 @@
 @extends('Layout.landlord_dashboard')
-
 @section('title', 'Edit Property')
-
 @section('content')
     <div class="container my-5">
 

@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>@yield('title', 'Landlord Dashboard')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -19,25 +18,32 @@
             box-shadow: 0 4px 24px rgba(44, 62, 80, 0.07);
             border-bottom: 1px solid #e3e8ee;
         }
+
         .navbar-brand {
             font-weight: 700;
             color: #198754 !important;
             letter-spacing: 1px;
         }
-        .navbar .nav-link, .navbar .dropdown-toggle {
+
+        .navbar .nav-link,
+        .navbar .dropdown-toggle {
             color: #4e5d6c !important;
             font-weight: 500;
             font-size: 1.05rem;
         }
-        .navbar .nav-link:hover, .navbar .dropdown-toggle:hover {
+
+        .navbar .nav-link:hover,
+        .navbar .dropdown-toggle:hover {
             color: #00bcd4 !important;
         }
+
         .notification-bell {
             position: relative;
             font-size: 1.35rem;
             color: #607d8b;
             cursor: pointer;
         }
+
         .notification-bell .badge {
             position: absolute;
             top: -6px;
@@ -46,6 +52,7 @@
             background: #ff5252;
             color: #fff;
         }
+
         .dropdown-menu-notifications {
             min-width: 320px;
             max-width: 350px;
@@ -193,45 +200,61 @@
                             $unreadCount = $attentionApps->count() + $openComplaints->count();
 
                             // prepare preview (top 3 recent items)
-                            $unreadItems = $attentionApps->concat($openComplaints)->sortByDesc('created_at')->values()->take(3);
+                            $unreadItems = $attentionApps
+                                ->concat($openComplaints)
+                                ->sortByDesc('created_at')
+                                ->values()
+                                ->take(3);
                         @endphp
 
-                        <a class="nav-link notification-bell" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link notification-bell" href="#" id="notificationDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-bell"></i>
-                            @if($unreadCount > 0)
+                            @if ($unreadCount > 0)
                                 <span class="badge">{{ $unreadCount }}</span>
                             @endif
                         </a>
 
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-notifications shadow" aria-labelledby="notificationDropdown">
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-notifications shadow"
+                            aria-labelledby="notificationDropdown">
                             <li class="dropdown-header fw-bold">Notifications</li>
-                            @if($unreadItems->isEmpty())
-                                <li><div class="dropdown-item text-muted">No new notifications</div></li>
+                            @if ($unreadItems->isEmpty())
+                                <li>
+                                    <div class="dropdown-item text-muted">No new notifications</div>
+                                </li>
                             @else
-                                @foreach($unreadItems as $item)
-                                    @if(isset($item->subject) && isset($item->description))
+                                @foreach ($unreadItems as $item)
+                                    @if (isset($item->subject) && isset($item->description))
                                         {{-- complaint --}}
                                         <li>
-                                            <a class="dropdown-item" href="{{ route('dashboard.landlord.complaints.show', $item->id) }}">
+                                            <a class="dropdown-item"
+                                                href="{{ route('dashboard.landlord.complaints.show', $item->id) }}">
                                                 <i class="fa fa-triangle-exclamation text-danger me-2"></i>
                                                 {{ \Illuminate\Support\Str::limit($item->subject, 60) }}
-                                                <div class="small text-muted">Complaint • {{ optional($item->property)->title ?? 'Property' }}</div>
+                                                <div class="small text-muted">Complaint •
+                                                    {{ optional($item->property)->title ?? 'Property' }}</div>
                                             </a>
                                         </li>
                                     @else
                                         {{-- application --}}
                                         <li>
-                                            <a class="dropdown-item" href="{{ route('dashboard.landlord.application.show', $item->id) }}">
+                                            <a class="dropdown-item"
+                                                href="{{ route('dashboard.landlord.application.show', $item->id) }}">
                                                 <i class="fa fa-envelope text-primary me-2"></i>
-                                                {{ optional($item->tenant)->name ?? 'Applicant' }} • {{ optional($item->property)->title ?? 'Property' }}
+                                                {{ optional($item->tenant)->name ?? 'Applicant' }} •
+                                                {{ optional($item->property)->title ?? 'Property' }}
                                                 <div class="small text-muted">Status: {{ ucfirst($item->status) }}</div>
                                             </a>
                                         </li>
                                     @endif
                                 @endforeach
                             @endif
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-center text-muted" href="{{ route('dashboard.landlord.notifications.index') }}">View all notifications</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-center text-muted"
+                                    href="{{ route('dashboard.landlord.notifications.index') }}">View all
+                                    notifications</a></li>
                         </ul>
                     </li>
                     <li class="nav-item ms-3">
@@ -325,23 +348,25 @@
                     class="{{ request()->routeIs('landlord.payment') ? 'active' : '' }}">
                     <i class="fa-solid fa-credit-card"></i> Payment
                 </a>
-                
+
                 <div class="nav-section">Settings</div>
                 <a href="{{ route('dashboard.landlord.settings.index') }}"
                     class="{{ request()->routeIs('landlord.settings') ? 'active' : '' }}">
                     <i class="fa-solid fa-gear"></i> Settings
                 </a>
                 <li class="nav-item mb-1">
-                        <a class="nav-link @if(request()->routeIs('landlord.profile')) active @endif" href="{{ route('dashboard.landlord.profile.index') }}">
-                            <i class="fa-solid fa-user"></i> Profile Details
-                        </a>
+                    <a class="nav-link @if (request()->routeIs('landlord.profile')) active @endif"
+                        href="{{ route('dashboard.landlord.profile.index') }}">
+                        <i class="fa-solid fa-user"></i> Profile Details
+                    </a>
                 </li>
 
                 <a href="" class="logout"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="fa-solid fa-right-from-bracket"></i> Logout
                 </a>
-                <form id="logout-form" action="{{ route('dashboard.landlord.logout') }}" method="POST" class="d-none">
+                <form id="logout-form" action="{{ route('dashboard.landlord.logout') }}" method="POST"
+                    class="d-none">
                     @csrf
                 </form>
             </nav>
@@ -358,4 +383,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')
 </body>
+
 </html>
