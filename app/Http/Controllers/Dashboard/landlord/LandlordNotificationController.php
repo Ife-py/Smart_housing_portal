@@ -13,39 +13,21 @@ class LandlordNotificationController extends Controller
 {
     public function index()
     {
-        $landlordId = Auth::guard('landlord')->id();
-        // applications that are read/processed
-        $applications = Application::where('landlord_id', $landlordId)
-            ->where('status', '!=', 'pending')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        // Use the database notifications as the source of truth for the notifications page.
+        $user = Auth::guard('landlord')->user();
 
-        // complaints for this landlord
-        $processedComplaints = Complaint::where('landlord_id', $landlordId)
-            ->where('is_read_by_landlord', true)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        if (! $user) {
+            abort(403);
+        }
 
-        // unread / new notifications: treat 'pending' applications as unread notifications
-        $unreadApplications = Application::where('landlord_id', $landlordId)
-            ->where('status', 'pending')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        // all notifications (paginated lightly)
+        $allNotifications = $user->notifications()->orderBy('created_at', 'desc')->get();
+        $unreadNotifications = $user->unreadNotifications()->orderBy('created_at', 'desc')->get();
 
-        $unreadComplaints = Complaint::where('landlord_id', $landlordId)
-            ->where('is_read_by_landlord', false)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        // merge processed/old items for display
-        $processedItems = $applications->concat($processedComplaints)->sortByDesc('created_at');
-
-        // merge unread items
-        $unreadItems = $unreadApplications->concat($unreadComplaints)->sortByDesc('created_at');
-
+        // keep variable names compatible with existing view expectations
         return view('dashboard.landlord.notifications.index', [
-            'applications' => $processedItems,
-            'unreadApplications' => $unreadItems,
+            'applications' => $allNotifications,
+            'unreadApplications' => $unreadNotifications,
         ]);
     }
 
@@ -58,5 +40,26 @@ class LandlordNotificationController extends Controller
 
         // reuse the application details view
         return view('dashboard.landlord.applications.show', compact('application'));
+    }
+
+    /**
+     * Mark a database notification as read and redirect to its stored URL.
+     */
+    public function notificationShow($id)
+    {
+        $user = Auth::guard('landlord')->user();
+        if (! $user) {
+            abort(403, 'Unauthorized');
+        }
+
+        $notification = $user->notifications()->find($id);
+        if (! $notification) {
+            abort(404);
+        }
+
+        $notification->markAsRead();
+
+        $url = $notification->data['url'] ?? route('dashboard.landlord.notifications.index');
+        return redirect($url);
     }
 }

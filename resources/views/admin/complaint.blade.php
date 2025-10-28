@@ -1,6 +1,9 @@
 @extends('Layout.admin')
 
 @section('content')
+@php
+    use Illuminate\Support\Str;
+@endphp
 <div class="container-fluid">
     <div class="mb-4">
         <h2 class="fw-bold">Tenant Complaints</h2>
@@ -8,9 +11,18 @@
     </div>
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-body">
-            <form class="row g-3">
+            <form class="row g-3" method="GET" action="{{ route('admin.complaints.index') }}">
                 <div class="col-md-4">
-                    <input type="text" class="form-control" placeholder="Search by tenant, subject, or status...">
+                    <input type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Search by tenant, subject, or status...">
+                </div>
+                <div class="col-md-3">
+                    <select name="status" class="form-select">
+                        <option value="">All Status</option>
+                        <option value="open" {{ request('status')=='open' ? 'selected' : '' }}>Open</option>
+                        <option value="pending" {{ request('status')=='pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="resolved" {{ request('status')=='resolved' ? 'selected' : '' }}>Resolved</option>
+                        <option value="closed" {{ request('status')=='closed' ? 'selected' : '' }}>Closed</option>
+                    </select>
                 </div>
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-outline-primary w-100">Search</button>
@@ -25,91 +37,87 @@
                 <thead class="table-light">
                     <tr>
                         <th>#</th>
-                        <th>Tenant Name</th>
-                        <th>Complaint Subject</th>
-                        <th>Complaint Description</th>
-                        <th>Status</th>
-                        <th>Date Submitted</th>
+                        <th>Tenant</th>
+                        <th>Property</th>
+                        <th>Subject</th>
+                        <th>Verification</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- Example static data, replace with @foreach($complaints as $complaint) --}}
+                    @forelse($complaints as $i => $complaint)
                     <tr>
-                        <td>1</td>
-                        <td>Samuel Okoro</td>
-                        <td>Leaking Roof</td>
-                        <td>There is a leak in the master bedroom roof.</td>
-                        <td><span class="badge bg-warning text-dark">Pending (Landlord)</span></td>
-                        <td>2025-07-20</td>
+                        <td>{{ $i + 1 }}</td>
+                        <td>{{ optional($complaint->tenant)->name ?? optional($complaint->tenant)->email ?? '—' }}</td>
+                        <td>{{ optional($complaint->property)->title ?? optional($complaint->property)->address ?? '—' }}</td>
+                        <td class="text-truncate" style="max-width:320px;">{{ $complaint->subject }}</td>
                         <td>
-                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#complaintModal1">
-                                <i class="bi bi-eye"></i> View
+                            @php
+                                $conflict = false;
+                                $tenantResp = strtolower($complaint->tenant_response ?? '');
+                                $landlordAck = (bool) $complaint->landlord_acknowledged;
+                                if (($landlordAck && $tenantResp === 'disapproved') || ($tenantResp === 'acknowledged' && ! $landlordAck)) {
+                                    $conflict = true;
+                                }
+                            @endphp
+                            @if($conflict)
+                                <span class="badge bg-danger">Conflict</span>
+                            @elseif(strtolower($complaint->status) === 'closed' && $tenantResp === 'acknowledged')
+                                <span class="badge bg-success">Verified</span>
+                            @elseif($tenantResp === 'acknowledged')
+                                <span class="badge bg-info">Tenant acknowledged</span>
+                            @elseif($tenantResp === 'disapproved')
+                                <span class="badge bg-warning text-dark">Tenant disagrees</span>
+                            @else
+                                <span class="badge bg-secondary">{{ ucfirst($complaint->status ?? '—') }}</span>
+                            @endif
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#complaintModal{{ $complaint->id }}">
+                                <i class="bi bi-eye"></i>
                             </button>
                         </td>
                     </tr>
 
-                    <!-- Modal for Complaint 1 -->
-                    <div class="modal fade" id="complaintModal1" tabindex="-1" aria-labelledby="complaintModalLabel1" aria-hidden="true">
+                    <!-- Modal -->
+                    <div class="modal fade" id="complaintModal{{ $complaint->id }}" tabindex="-1" aria-labelledby="complaintModalLabel{{ $complaint->id }}" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="complaintModalLabel1">Complaint Details: Leaking Roof</h5>
+                                    <h5 class="modal-title" id="complaintModalLabel{{ $complaint->id }}">Complaint Details: {{ $complaint->subject }}</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <p><strong>Tenant Name:</strong> Samuel Okoro</p>
-                                    <p><strong>Subject:</strong> Leaking Roof</p>
-                                    <p><strong>Description:</strong> There is a leak in the master bedroom roof that causes water to drip during rain.</p>
-                                    <p><strong>Status:</strong> Pending (Landlord)</p>
-                                    <p><strong>Date Submitted:</strong> 2025-07-20</p>
+                                    <p><strong>Tenant Name:</strong> {{ optional($complaint->tenant)->name ?? '—' }}</p>
+                                    <p><strong>Property:</strong> {{ optional($complaint->property)->title ?? optional($complaint->property)->address ?? '—' }}</p>
+                                    <p><strong>Subject:</strong> {{ $complaint->subject }}</p>
+                                    <p><strong>Description:</strong> {{ $complaint->description }}</p>
+                                    <p><strong>Status:</strong> {{ ucfirst($complaint->status ?? 'Open') }}</p>
+                                    <p><strong>Date Submitted:</strong> {{ $complaint->created_at ? $complaint->created_at->format('Y-m-d H:i') : '-' }}</p>
                                 </div>
                                 <div class="modal-footer">
                                     <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button class="btn btn-success">Mark as Resolved</button>
+                                    <form action="{{ route('admin.complaints.resolve', $complaint->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success">Mark as Resolved</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    @empty
                     <tr>
-                        <td>2</td>
-                        <td>Fatima Bello</td>
-                        <td>No Water</td>
-                        <td>Water supply has been off for 2 days.</td>
-                        <td><span class="badge bg-success">Resolved (Landlord)</span></td>
-                        <td>2025-07-18</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#complaintModal2">
-                                <i class="bi bi-eye"></i> View
-                            </button>
-                        </td>
+                        <td colspan="8" class="text-center text-muted">No complaints found.</td>
                     </tr>
-
-                    <!-- Modal for Complaint 2 -->
-                    <div class="modal fade" id="complaintModal2" tabindex="-1" aria-labelledby="complaintModalLabel2" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="complaintModalLabel2">Complaint Details: No Water</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p><strong>Tenant Name:</strong> Fatima Bello</p>
-                                    <p><strong>Subject:</strong> No Water</p>
-                                    <p><strong>Description:</strong> Water supply has been off for 2 days and needs urgent attention.</p>
-                                    <p><strong>Status:</strong> Resolved (Landlord)</p>
-                                    <p><strong>Date Submitted:</strong> 2025-07-18</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {{-- @endforeach --}}
+                    @endforelse
                 </tbody>
             </table>
+        </div>
+    </div>
+    <div class="card-footer bg-white border-0">
+        <div class="d-flex justify-content-end">
+            {{ $complaints->links() }}
         </div>
     </div>
 </div>

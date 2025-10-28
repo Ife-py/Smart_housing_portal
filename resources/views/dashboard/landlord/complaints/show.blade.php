@@ -25,13 +25,21 @@
             @endif
 
             <div class="mt-3">
-                @if(strtolower($complaint->status) !== 'resolved')
-                <form action="{{ route('dashboard.landlord.complaints.resolve', $complaint->id) }}" method="post">
-                    @csrf
-                    <button class="btn btn-success">Mark as Resolved</button>
-                </form>
+                @if(strtolower($complaint->status) !== 'resolved' && ! $complaint->landlord_acknowledged)
+                    <form action="{{ route('dashboard.landlord.complaints.resolve', $complaint->id) }}" method="post">
+                        @csrf
+                        <button class="btn btn-success">Mark as Resolved</button>
+                    </form>
                 @else
-                <span class="badge bg-success">Resolved</span>
+                    <div class="d-flex gap-2 align-items-center">
+                        <span class="badge bg-success">Resolved</span>
+                        @if($complaint->landlord_acknowledged)
+                            <form action="{{ route('dashboard.landlord.complaints.revert', $complaint->id) }}" method="POST">
+                                @csrf
+                                <button class="btn btn-sm btn-outline-secondary ms-2"><i class="fa fa-undo me-1"></i> Revert</button>
+                            </form>
+                        @endif
+                    </div>
                 @endif
             </div>
         </div>

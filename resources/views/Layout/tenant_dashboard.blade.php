@@ -64,28 +64,11 @@
                 <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item dropdown me-2">
                         @php
-                            $tenantId = Auth::guard('tenant')->id() ?? Auth::id();
-                            try {
-                                // attention applications for tenant (pending or accepted) and unread by tenant
-                                $attentionApps = \App\Models\Application::where('tenant_id', $tenantId)
-                                    ->whereIn('status', ['pending', 'accepted'])
-                                    ->where('is_read_by_tenant', false)
-                                    ->orderBy('created_at', 'desc')
-                                    ->get();
-
-                                // open complaints for tenant (not resolved) and unread by tenant
-                                $openComplaints = \App\Models\Complaint::where('tenant_id', $tenantId)
-                                    ->where('status', '!=', 'resolved')
-                                    ->where('is_read_by_tenant', false)
-                                    ->orderBy('created_at', 'desc')
-                                    ->get();
-
-                                $unreadCount = $attentionApps->count() + $openComplaints->count();
-                                $preview = $attentionApps->concat($openComplaints)->sortByDesc('created_at')->values()->take(3);
-                            } catch (\Exception $e) {
-                                $unreadCount = 0;
-                                $preview = collect();
-                            }
+                            // Use Laravel database notifications for tenant bell preview
+                            $user = Auth::guard('tenant')->user() ?? Auth::user();
+                            $unreadNotifications = $user ? $user->unreadNotifications : collect();
+                            $unreadCount = $unreadNotifications->count();
+                            $previewNotifications = $unreadNotifications->take(3);
                         @endphp
 
                         <a class="nav-link dropdown-toggle position-relative" href="#" id="tenantNotificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -96,35 +79,23 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow dropdown-menu-notifications" aria-labelledby="tenantNotificationDropdown" style="min-width:320px;">
                             <li class="dropdown-header fw-bold">Notifications</li>
-                            @if($preview->isEmpty())
+                            @if($previewNotifications->isEmpty())
                                 <li class="dropdown-item text-muted">No new notifications</li>
                             @else
-                                @foreach($preview as $item)
-                                    @if(isset($item->subject) && isset($item->description))
-                                        {{-- complaint --}}
-                                        <li class="dropdown-item d-flex justify-content-between align-items-start">
-                                            <div>
-                                                <div class="fw-semibold">{{ \Illuminate\Support\Str::limit($item->subject, 60) }}</div>
-                                                <div class="small text-muted">{{ optional($item->property)->title ?? 'Property' }}</div>
-                                                <div class="small text-muted">{{ $item->created_at->diffForHumans() }}</div>
-                                            </div>
-                                            <div class="ms-2">
-                                                <a href="{{ route('dashboard.tenant.complaints.index') }}" class="btn btn-sm btn-outline-primary">Open</a>
-                                            </div>
-                                        </li>
-                                    @else
-                                        {{-- application --}}
-                                        <li class="dropdown-item d-flex justify-content-between align-items-start">
-                                            <div>
-                                                <div class="fw-semibold">{{ optional($item->property)->title ?? 'Property' }}</div>
-                                                <div class="small text-muted">{{ Str::limit($item->message ?? '', 60) }}</div>
-                                                <div class="small text-muted">Status: {{ ucfirst($item->status) }} • {{ $item->created_at->diffForHumans() }}</div>
-                                            </div>
-                                            <div class="ms-2">
-                                                <a href="{{ route('dashboard.tenant.notifications.index') }}" class="btn btn-sm btn-outline-primary">Open</a>
-                                            </div>
-                                        </li>
-                                    @endif
+                                @foreach($previewNotifications as $notification)
+                                    @php $data = $notification->data ?? []; @endphp
+                                    <li class="dropdown-item d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <div class="fw-semibold">{{ \Illuminate\Support\Str::limit($data['message'] ?? ($data['subject'] ?? 'Notification'), 60) }}</div>
+                                            @if(isset($data['subject']))
+                                                <div class="small text-muted">{{ $data['subject'] }}</div>
+                                            @endif
+                                            <div class="small text-muted">{{ isset($notification->created_at) ? $notification->created_at->diffForHumans() : '' }}</div>
+                                        </div>
+                                        <div class="ms-2">
+                                            <a href="{{ route('dashboard.tenant.notifications.show', $notification->id) }}" class="btn btn-sm btn-outline-primary">Open</a>
+                                        </div>
+                                    </li>
                                 @endforeach
                             @endif
                             <li><hr class="dropdown-divider"></li>

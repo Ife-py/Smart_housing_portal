@@ -26,6 +26,39 @@
         <div class="mt-3">
             <span class="badge bg-{{ strtolower($complaint->status) == 'resolved' ? 'success' : 'warning' }}">{{ ucfirst($complaint->status) }}</span>
         </div>
+        <div class="mt-3">
+            @if(strtolower($complaint->status) === 'resolved' && !$complaint->tenant_response)
+                <div class="d-flex gap-2">
+                    <form action="{{ route('dashboard.tenant.complaints.acknowledge', $complaint->id) }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="response" value="acknowledged">
+                        <button type="submit" class="btn btn-sm btn-success">
+                            <i class="fa fa-check me-1"></i> Acknowledge
+                        </button>
+                    </form>
+                    <form action="{{ route('dashboard.tenant.complaints.acknowledge', $complaint->id) }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="response" value="disapproved">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            <i class="fa fa-times me-1"></i> Disapprove
+                        </button>
+                    </form>
+                </div>
+            @elseif($complaint->tenant_response)
+                <div class="mt-2 d-flex gap-2">
+                    <form action="{{ route('dashboard.tenant.complaints.response.revert', $complaint->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-outline-secondary"><i class="fa fa-undo me-1"></i> Revert</button>
+                    </form>
+                </div>
+            @elseif($complaint->tenant_response === 'acknowledged' && strtolower($complaint->status) === 'closed')
+                <div class="mt-2"><span class="badge bg-success">Verified by tenant</span></div>
+            @elseif($complaint->tenant_response === 'acknowledged')
+                <div class="mt-2"><span class="badge bg-info">Tenant acknowledged</span></div>
+            @elseif($complaint->tenant_response === 'disapproved')
+                <div class="mt-2"><span class="badge bg-danger">Tenant disagrees</span></div>
+            @endif
+        </div>
     </div>
 </div>
 @endsection

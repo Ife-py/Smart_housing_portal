@@ -11,33 +11,40 @@ use Illuminate\Support\Facades\Auth;
 class TenantNotificationController extends Controller
 {
     public function index(){
-        $tenantId = Auth::guard('tenant')->id() ?? Auth::id();
+        $user = Auth::guard('tenant')->user() ?? Auth::user();
 
-        // For tenants, notifications are updates to their applications
-        $unreadApplications = Application::where('tenant_id', $tenantId)
-            ->where('status', 'pending')
-            ->get();
+        if (! $user) {
+            abort(403);
+        }
 
-        $unreadComplaints = Complaint::where('tenant_id', $tenantId)
-            ->where('is_read_by_tenant', false)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $allNotifications = $user->notifications()->orderBy('created_at', 'desc')->get();
+        $unreadNotifications = $user->unreadNotifications()->orderBy('created_at', 'desc')->get();
 
-        $processedApplications = Application::where('tenant_id', $tenantId)
-            ->where('status', '!=', 'pending')
-            ->orderBy('updated_at', 'desc')
-            ->limit(20)
-            ->get();
-
-        $processedComplaints = Complaint::where('tenant_id', $tenantId)
-            ->where('is_read_by_tenant', true)
-            ->orderBy('created_at', 'desc')
-            ->limit(20)
-            ->get();
-
-        $unreadItems = $unreadApplications->concat($unreadComplaints)->sortByDesc('created_at');
-        $processedItems = $processedApplications->concat($processedComplaints)->sortByDesc('created_at');
+        // Keep names expected by the view
+        $unreadItems = $unreadNotifications;
+        $processedItems = $allNotifications;
 
         return view('dashboard.tenant.notification.index', compact('unreadItems', 'processedItems'));
+    }
+
+    /**
+     * Mark a tenant database notification as read and redirect to stored URL
+     */
+    public function notificationShow($id)
+    {
+        $user = Auth::guard('tenant')->user() ?? Auth::user();
+        if (! $user) {
+            abort(403, 'Unauthorized');
+        }
+
+        $notification = $user->notifications()->find($id);
+        if (! $notification) {
+            abort(404);
+        }
+
+        $notification->markAsRead();
+
+        $url = $notification->data['url'] ?? route('dashboard.tenant.notifications.index');
+        return redirect($url);
     }
 }

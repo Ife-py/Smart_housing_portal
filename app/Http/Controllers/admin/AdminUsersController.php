@@ -11,7 +11,6 @@ class AdminUsersController extends Controller
 {
     public function index()
     {
-        // Logic to fetch users data
         $tenants = Tenant::all();
         $landlords = Landlord::all();
         

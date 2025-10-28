@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Complaint;
 use App\Models\Application as PropertyApplication;
 use App\Models\Properties;
+use App\Models\Landlord;
+use App\Notifications\ComplaintCreated;
 
 class TenantComplaintsController extends Controller
 {
@@ -82,7 +84,13 @@ class TenantComplaintsController extends Controller
             'is_read_by_tenant' => true,
         ]);
 
-        // TODO: create notification entries for landlord and tenant (later step)
+        // notify landlord that a new complaint was filed
+        if ($landlordId) {
+            $landlord = Landlord::find($landlordId);
+            if ($landlord) {
+                $landlord->notify(new ComplaintCreated($complaint));
+            }
+        }
 
         return redirect()->route('dashboard.tenant.complaints.index')->with('success', 'Complaint submitted successfully.');
     }
@@ -99,5 +107,88 @@ class TenantComplaintsController extends Controller
         }
 
         return view('dashboard.tenant.complaints.show', compact('complaint'));
+    }
+
+    /**
+     * Tenant responds to landlord action: either 'acknowledged' or 'disapproved'.
+     */
+    public function acknowledge(Request $request, $id)
+    {
+        $tenantId = Auth::guard('tenant')->id() ?? Auth::id();
+        $complaint = Complaint::where('tenant_id', $tenantId)->where('id', $id)->firstOrFail();
+
+        $data = $request->validate([
+            'response' => 'required|in:acknowledged,disapproved',
+        ]);
+
+        $response = $data['response'];
+
+        // update response flags
+        $complaint->tenant_response = $response;
+        $complaint->tenant_acknowledged = $response === 'acknowledged';
+        $complaint->is_read_by_tenant = true;
+
+        if ($response === 'acknowledged' && strtolower($complaint->status) === 'resolved') {
+            $complaint->status = 'closed';
+        }
+
+        if ($response === 'disapproved') {
+            // mark as disputed so admin can review
+            $complaint->status = 'disputed';
+            $complaint->is_read_by_landlord = false; // notify landlord/admin
+        }
+
+        $complaint->save();
+
+        // notify landlord of tenant response
+        if ($complaint->landlord) {
+            try {
+                $complaint->landlord->notify(new \App\Notifications\ComplaintResponded($complaint, $response));
+            } catch (\Throwable $e) {
+                // ignore notify errors
+            }
+        }
+
+        return back()->with('success', 'Your response has been recorded.');
+    }
+
+    /**
+     * Tenant can revert their earlier response.
+     */
+    public function revertResponse($id)
+    {
+        $tenantId = Auth::guard('tenant')->id() ?? Auth::id();
+        $complaint = Complaint::where('tenant_id', $tenantId)->where('id', $id)->firstOrFail();
+
+        $previous = $complaint->tenant_response;
+        if (! $previous) {
+            return back()->with('info', 'No response to revert.');
+        }
+
+        // clear tenant response
+        $complaint->tenant_response = null;
+        $complaint->tenant_acknowledged = false;
+
+        // restore status
+        if ($previous === 'acknowledged' && strtolower($complaint->status) === 'closed') {
+            $complaint->status = 'resolved';
+        }
+        if ($previous === 'disapproved' && strtolower($complaint->status) === 'disputed') {
+            $complaint->status = 'open';
+        }
+
+        $complaint->is_read_by_landlord = false; // notify landlord
+        $complaint->save();
+
+        // notify landlord about revert
+        if ($complaint->landlord) {
+            try {
+                $complaint->landlord->notify(new \App\Notifications\ComplaintResponseReverted($complaint));
+            } catch (\Throwable $e) {
+                // ignore
+            }
+        }
+
+        return back()->with('success', 'Your response has been reverted.');
     }
 }

@@ -1,5 +1,4 @@
-\<?php
-
+<?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PropertyApplicationController;
 use App\Http\Controllers\HomeController;
@@ -67,6 +66,7 @@ Route::prefix('admin')->name('admin.')->group(function(){
     
     Route::controller(AdminComplaintsController::class)->prefix('/complaints')->group(function () {
         Route::get('/', 'index')->name('complaints.index');
+        Route::post('/{id}/resolve', 'resolve')->name('complaints.resolve');
     });
     Route::controller(AdminPaymentsController::class)->prefix('/payments')->group(function () {
         Route::get('/', 'index')->name('payments.index');
@@ -119,6 +119,7 @@ Route::middleware('auth:landlord')->prefix('dashboard/landlord')->name('dashboar
     });
     Route::controller(LandlordNotificationController::class)->prefix('/notifications')->group(function(){
         Route::get('/','index')->name('notifications.index');
+        Route::get('/{id}','notificationShow')->name('notifications.show');
     });
      Route::controller(PaymentController::class)->prefix('/payment')->group(function(){
         Route::get('/','index')->name('payments.index');
@@ -139,6 +140,7 @@ Route::middleware('auth:landlord')->prefix('dashboard/landlord')->name('dashboar
         Route::get('/','index')->name('complaints.index');
         Route::get('/{id}/show','show')->name('complaints.show');
         Route::post('/{id}/resolve','resolve')->name('complaints.resolve');
+        Route::post('/{id}/revert','revert')->name('complaints.revert');
     });
 });
 
@@ -171,6 +173,8 @@ Route::middleware('auth:tenant')->prefix('dashboard/tenant')->name('dashboard.te
         Route::get('/create','create')->name('complaints.create');
         Route::post('/store','store')->name('complaints.store');
         Route::get('/{id}/show','show')->name('complaints.show');
+        Route::post('/{id}/acknowledge','acknowledge')->name('complaints.acknowledge');
+        Route::post('/{id}/response/revert','revertResponse')->name('complaints.response.revert');
     });
     Route::controller(TenantPaymentController::class)->prefix('/payments')->group(function(){
         Route::get('/','index')->name('payments.index');
@@ -185,6 +189,7 @@ Route::middleware('auth:tenant')->prefix('dashboard/tenant')->name('dashboard.te
     // Tenant notifications
     Route::controller(TenantNotificationController::class)->prefix('/notifications')->group(function(){
         Route::get('/','index')->name('notifications.index');
+        Route::get('/{id}','notificationShow')->name('notifications.show');
     });
     Route::post('/properties/{property}/apply', [PropertyApplicationController::class, 'apply'])
         ->name('property.apply');

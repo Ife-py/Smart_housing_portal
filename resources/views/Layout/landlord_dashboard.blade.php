@@ -181,30 +181,11 @@
                 <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item dropdown">
                         @php
-                            $landlordId = Auth::guard('landlord')->id() ?? Auth::id();
-                            // unresolved applications: pending or accepted (landlord attention)
-                            $attentionApps = \App\Models\Application::where('landlord_id', $landlordId)
-                                ->whereIn('status', ['pending', 'accepted'])
-                                ->where('is_read_by_landlord', false)
-                                ->orderBy('created_at', 'desc')
-                                ->get();
-
-                            // unresolved complaints: status != resolved and unread by landlord
-                            $openComplaints = \App\Models\Complaint::where('landlord_id', $landlordId)
-                                ->where('status', '!=', 'resolved')
-                                ->where('is_read_by_landlord', false)
-                                ->orderBy('created_at', 'desc')
-                                ->get();
-
-                            // count items that require attention
-                            $unreadCount = $attentionApps->count() + $openComplaints->count();
-
-                            // prepare preview (top 3 recent items)
-                            $unreadItems = $attentionApps
-                                ->concat($openComplaints)
-                                ->sortByDesc('created_at')
-                                ->values()
-                                ->take(3);
+                            // Use database notifications so items shown in the bell reflect real notifications
+                            $user = Auth::guard('landlord')->user() ?? Auth::user();
+                            $unreadNotifications = $user ? $user->unreadNotifications : collect();
+                            $unreadCount = $unreadNotifications->count();
+                            $previewNotifications = $unreadNotifications->take(3);
                         @endphp
 
                         <a class="nav-link notification-bell" href="#" id="notificationDropdown" role="button"
@@ -218,35 +199,27 @@
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-notifications shadow"
                             aria-labelledby="notificationDropdown">
                             <li class="dropdown-header fw-bold">Notifications</li>
-                            @if ($unreadItems->isEmpty())
+                            @if ($previewNotifications->isEmpty())
                                 <li>
                                     <div class="dropdown-item text-muted">No new notifications</div>
                                 </li>
                             @else
-                                @foreach ($unreadItems as $item)
-                                    @if (isset($item->subject) && isset($item->description))
-                                        {{-- complaint --}}
-                                        <li>
-                                            <a class="dropdown-item"
-                                                href="{{ route('dashboard.landlord.complaints.show', $item->id) }}">
+                                @foreach ($previewNotifications as $notification)
+                                    @php $data = $notification->data ?? []; @endphp
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('dashboard.landlord.notifications.show', $notification->id) }}">
+                                            @if(isset($data['type']) && \Illuminate\Support\Str::contains($data['type'], 'complaint'))
                                                 <i class="fa fa-triangle-exclamation text-danger me-2"></i>
-                                                {{ \Illuminate\Support\Str::limit($item->subject, 60) }}
-                                                <div class="small text-muted">Complaint •
-                                                    {{ optional($item->property)->title ?? 'Property' }}</div>
-                                            </a>
-                                        </li>
-                                    @else
-                                        {{-- application --}}
-                                        <li>
-                                            <a class="dropdown-item"
-                                                href="{{ route('dashboard.landlord.application.show', $item->id) }}">
+                                            @else
                                                 <i class="fa fa-envelope text-primary me-2"></i>
-                                                {{ optional($item->tenant)->name ?? 'Applicant' }} •
-                                                {{ optional($item->property)->title ?? 'Property' }}
-                                                <div class="small text-muted">Status: {{ ucfirst($item->status) }}</div>
-                                            </a>
-                                        </li>
-                                    @endif
+                                            @endif
+                                            {{ \Illuminate\Support\Str::limit($data['message'] ?? ($data['subject'] ?? 'Notification'), 80) }}
+                                            @if(isset($data['subject']))
+                                                <div class="small text-muted">{{ $data['subject'] }}</div>
+                                            @endif
+                                            <div class="small text-muted">{{ isset($notification->created_at) ? $notification->created_at->diffForHumans() : '' }}</div>
+                                        </a>
+                                    </li>
                                 @endforeach
                             @endif
                             <li>

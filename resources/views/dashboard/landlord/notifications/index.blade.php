@@ -23,33 +23,48 @@
                         @foreach($unreadApplications as $item)
                             <li class="list-group-item d-flex justify-content-between align-items-start">
                                 <div class="me-3">
-                                    @if(isset($item->subject) && isset($item->description))
-                                        {{-- complaint --}}
-                                        <div class="fw-semibold">Complaint from {{ optional($item->tenant)->name ?? 'Tenant' }}</div>
-                                        <div class="small text-muted">Property: {{ optional($item->property)->title ?? '-' }}</div>
-                                        <div class="small mt-1 text-truncate" style="max-width:320px">{{ Str::limit($item->description, 120) }}</div>
+                                    @if($item instanceof \Illuminate\Notifications\DatabaseNotification)
+                                        @php $data = $item->data ?? []; @endphp
+                                        <div class="fw-semibold">{{ $data['subject'] ?? Str::limit($data['message'] ?? 'Notification', 50) }}</div>
+                                        @if(isset($data['complaint_id']))
+                                            <div class="small text-muted">Complaint • {{ $data['subject'] ?? '' }}</div>
+                                        @elseif(isset($data['message']))
+                                            <div class="small text-muted">{{ Str::limit($data['message'], 80) }}</div>
+                                        @endif
+                                        <div class="small text-muted">{{ $item->created_at->diffForHumans() }}</div>
                                     @else
-                                        {{-- application --}}
-                                        <div class="fw-semibold">{{ $item->tenant->name ?? 'Guest' }}</div>
-                                        <div class="small text-muted">Applied for: {{ $item->property->title ?? '-' }}</div>
-                                        <div class="small mt-1 text-truncate" style="max-width:320px">{{ $item->message }}</div>
+                                        {{-- legacy model objects (Application/Complaint) --}}
+                                        @if(isset($item->subject) && isset($item->description))
+                                            <div class="fw-semibold">Complaint from {{ optional($item->tenant)->name ?? 'Tenant' }}</div>
+                                            <div class="small text-muted">Property: {{ optional($item->property)->title ?? '-' }}</div>
+                                            <div class="small mt-1 text-truncate" style="max-width:320px">{{ Str::limit($item->description, 120) }}</div>
+                                        @else
+                                            <div class="fw-semibold">{{ $item->tenant->name ?? 'Guest' }}</div>
+                                            <div class="small text-muted">Applied for: {{ $item->property->title ?? '-' }}</div>
+                                            <div class="small mt-1 text-truncate" style="max-width:320px">{{ $item->message }}</div>
+                                        @endif
                                     @endif
                                 </div>
                                 <div class="text-end">
-                                    @if(isset($item->subject) && isset($item->description))
-                                        <a href="{{ route('dashboard.landlord.complaints.show', $item->id) }}" class="btn btn-sm btn-outline-info">View</a>
+                                    @if($item instanceof \Illuminate\Notifications\DatabaseNotification)
+                                        @php $url = $item->data['url'] ?? route('dashboard.landlord.notifications.index'); @endphp
+                                        <a href="{{ route('dashboard.landlord.notifications.show', $item->id) }}" class="btn btn-sm btn-outline-info">Open</a>
                                     @else
-                                        <div class="mb-2">
-                                            <form action="{{ route('dashboard.landlord.application.accept', $item->id) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                <button class="btn btn-sm btn-success">Accept</button>
-                                            </form>
-                                            <form action="{{ route('dashboard.landlord.application.decline', $item->id) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                <button class="btn btn-sm btn-outline-secondary">Decline</button>
-                                            </form>
-                                        </div>
-                                        <a href="{{ route('dashboard.landlord.application.show', $item->id) }}" class="btn btn-sm btn-outline-info">View</a>
+                                        @if(isset($item->subject) && isset($item->description))
+                                            <a href="{{ route('dashboard.landlord.complaints.show', $item->id) }}" class="btn btn-sm btn-outline-info">View</a>
+                                        @else
+                                            <div class="mb-2">
+                                                <form action="{{ route('dashboard.landlord.application.accept', $item->id) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    <button class="btn btn-sm btn-success">Accept</button>
+                                                </form>
+                                                <form action="{{ route('dashboard.landlord.application.decline', $item->id) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    <button class="btn btn-sm btn-outline-secondary">Decline</button>
+                                                </form>
+                                            </div>
+                                            <a href="{{ route('dashboard.landlord.application.show', $item->id) }}" class="btn btn-sm btn-outline-info">View</a>
+                                        @endif
                                     @endif
                                 </div>
                             </li>

@@ -22,12 +22,17 @@ class Complaint extends Model
         'attachments',
         'is_read_by_landlord',
         'is_read_by_tenant',
+        'landlord_acknowledged',
+        'tenant_acknowledged',
+        'tenant_response',
     ];
 
     protected $casts = [
         'attachments' => 'array',
         'is_read_by_landlord' => 'boolean',
         'is_read_by_tenant' => 'boolean',
+        'landlord_acknowledged' => 'boolean',
+        'tenant_acknowledged' => 'boolean',
     ];
 
     public function tenant()
