@@ -210,12 +210,16 @@
                                         <a class="dropdown-item" href="{{ route('dashboard.landlord.notifications.show', $notification->id) }}">
                                             @if(isset($data['type']) && \Illuminate\Support\Str::contains($data['type'], 'complaint'))
                                                 <i class="fa fa-triangle-exclamation text-danger me-2"></i>
+                                            @elseif(isset($data['title']))
+                                                <i class="fa fa-bullhorn text-info me-2"></i>
                                             @else
                                                 <i class="fa fa-envelope text-primary me-2"></i>
                                             @endif
-                                            {{ \Illuminate\Support\Str::limit($data['message'] ?? ($data['subject'] ?? 'Notification'), 80) }}
+                                            {{ \Illuminate\Support\Str::limit($data['message'] ?? ($data['title'] ?? 'Notification'), 80) }}
                                             @if(isset($data['subject']))
                                                 <div class="small text-muted">{{ $data['subject'] }}</div>
+                                            @elseif(isset($data['content']))
+                                                <div class="small text-muted">{{ $data['content'] }}</div>
                                             @endif
                                             <div class="small text-muted">{{ isset($notification->created_at) ? $notification->created_at->diffForHumans() : '' }}</div>
                                         </a>

@@ -176,6 +176,12 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('admin.announcements.index') }}"
+                    class="nav-link {{ request()->routeIs('admin.announcements.index') ? 'active' : '' }}">
+                    <i class="bi bi-megaphone icon"></i> Announcements
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('admin.settings.index') }}"
                     class="nav-link {{ request()->routeIs('admin.settings') ? 'active' : '' }}">
                     <i class="bi bi-gear icon"></i> Settings

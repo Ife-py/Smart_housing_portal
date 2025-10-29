@@ -86,9 +86,14 @@
                                     @php $data = $notification->data ?? []; @endphp
                                     <li class="dropdown-item d-flex justify-content-between align-items-start">
                                         <div>
-                                            <div class="fw-semibold">{{ \Illuminate\Support\Str::limit($data['message'] ?? ($data['subject'] ?? 'Notification'), 60) }}</div>
-                                            @if(isset($data['subject']))
-                                                <div class="small text-muted">{{ $data['subject'] }}</div>
+                                            @if(isset($data['title']))
+                                                <div class="fw-semibold">{{ \Illuminate\Support\Str::limit($data['title'], 60) }}</div>
+                                                <div class="small text-muted">{{ \Illuminate\Support\Str::limit($data['content'], 100) }}</div>
+                                            @else
+                                                <div class="fw-semibold">{{ \Illuminate\Support\Str::limit($data['message'] ?? ($data['subject'] ?? 'Notification'), 60) }}</div>
+                                                @if(isset($data['subject']))
+                                                    <div class="small text-muted">{{ $data['subject'] }}</div>
+                                                @endif
                                             @endif
                                             <div class="small text-muted">{{ isset($notification->created_at) ? $notification->created_at->diffForHumans() : '' }}</div>
                                         </div>

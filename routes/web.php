@@ -72,6 +72,8 @@ Route::prefix('admin')->name('admin.')->group(function(){
         Route::get('/', 'index')->name('payments.index');
     });
 
+    Route::resource('announcements', 'App\Http\Controllers\Admin\AnnouncementController');
+
 });
 
 
