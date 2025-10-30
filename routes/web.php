@@ -10,6 +10,7 @@ use App\Http\Controllers\admin\AdminReportsController;
 use App\Http\Controllers\admin\AdminSettingsController;
 use App\Http\Controllers\admin\AdminComplaintsController;
 use App\Http\Controllers\admin\AdminPaymentsController;
+use App\Http\Controllers\admin\AnnouncementController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RegisterLandlordsController;
 use App\Http\Controllers\Auth\RegisterTenantsController;
@@ -72,7 +73,16 @@ Route::prefix('admin')->name('admin.')->group(function(){
         Route::get('/', 'index')->name('payments.index');
     });
 
-    Route::resource('announcements', 'App\Http\Controllers\Admin\AnnouncementController');
+    Route::controller(AnnouncementController::class)->prefix('/announcements')->group(function () {
+        Route::get('/', 'index')->name('announcements.index');
+        Route::get('/create', 'create')->name('announcements.create');
+        Route::post('/store', 'store')->name('announcements.store');
+        Route::get('/{id}/edit', 'edit')->name('announcements.edit');
+        Route::put('/{id}/update', 'update')->name('announcements.update');
+        Route::delete('/{id}/delete', 'destroy')->name('announcements.destroy');
+    });
+
+    
 
 });
 
@@ -145,7 +155,6 @@ Route::middleware('auth:landlord')->prefix('dashboard/landlord')->name('dashboar
         Route::post('/{id}/revert','revert')->name('complaints.revert');
     });
 });
-
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 
 Route::middleware('auth:tenant')->prefix('dashboard/tenant')->name('dashboard.tenant.')->group(function(){

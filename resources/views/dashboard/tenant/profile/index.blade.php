@@ -2,6 +2,21 @@
 
 @section('content')
     <div class="container py-4">
+        @if (session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
 
         <!-- Profile Header -->
         <div class="tenant-welcome d-flex align-items-center mb-4">

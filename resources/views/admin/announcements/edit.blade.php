@@ -7,26 +7,29 @@
             <!-- Page Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="fw-bold text-primary mb-0">
-                    <i class="bi bi-megaphone-fill me-2"></i> Create New Announcement
+                    <i class="bi bi-pencil-square me-2"></i> Edit Announcement
                 </h2>
                 <a href="{{ route('admin.announcements.index') }}" class="btn btn-outline-secondary">
                     <i class="bi bi-arrow-left me-1"></i> Back to List
                 </a>
             </div>
 
-            <!-- Announcement Form -->
+            <!-- Edit Form Card -->
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4">
-                    <form action="{{ route('admin.announcements.store') }}" method="POST">
+                    <form action="{{ route('admin.announcements.update', $announcement->id) }}" method="POST">
                         @csrf
+                        @method('PUT')
+
                         <div class="mb-3">
                             <label for="title" class="form-label fw-semibold">Announcement Title</label>
                             <input 
                                 type="text" 
                                 name="title" 
                                 id="title" 
+                                value="{{ old('title', $announcement->title) }}" 
                                 class="form-control form-control-lg rounded-3 shadow-sm" 
-                                placeholder="Enter announcement title" 
+                                placeholder="Edit announcement title" 
                                 required>
                         </div>
 
@@ -37,13 +40,16 @@
                                 id="content" 
                                 rows="6" 
                                 class="form-control rounded-3 shadow-sm" 
-                                placeholder="Write the announcement details here..." 
-                                required></textarea>
+                                placeholder="Update the announcement details..." 
+                                required>{{ old('content', $announcement->content) }}</textarea>
                         </div>
 
-                        <div class="d-flex justify-content-end">
+                        <div class="d-flex justify-content-between">
+                            <button type="reset" class="btn btn-outline-secondary btn-lg px-4">
+                                <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                            </button>
                             <button type="submit" class="btn btn-success btn-lg px-4 shadow-sm">
-                                <i class="bi bi-check-circle me-2"></i> Publish Announcement
+                                <i class="bi bi-check-circle me-2"></i> Update Announcement
                             </button>
                         </div>
                     </form>
@@ -52,7 +58,7 @@
 
             <!-- Footer Note -->
             <div class="text-center text-muted mt-4 small">
-                <i class="bi bi-info-circle"></i> Ensure announcements are clear and concise before publishing.
+                <i class="bi bi-info-circle"></i> Changes made here will be visible immediately to all users.
             </div>
         </div>
     </div>

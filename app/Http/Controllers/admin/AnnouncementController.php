@@ -62,7 +62,8 @@ class AnnouncementController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $announcement = Announcement::find($id);
+        return view('admin.announcements.edit',compact('announcement'));
     }
 
     /**
@@ -70,7 +71,15 @@ class AnnouncementController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'title' => 'required',
+            'content' => 'required',
+        ]);
+
+        $announcement = Announcement::find($id);
+        $announcement->update($request->all());
+
+        return redirect()->route('admin.announcements.index')->with('success', 'Announcement updated successfully.');
     }
 
     /**
