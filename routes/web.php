@@ -11,6 +11,7 @@ use App\Http\Controllers\admin\AdminSettingsController;
 use App\Http\Controllers\admin\AdminComplaintsController;
 use App\Http\Controllers\admin\AdminPaymentsController;
 use App\Http\Controllers\admin\AnnouncementController;
+use App\Http\Controllers\admin\AdminAuthController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RegisterLandlordsController;
 use App\Http\Controllers\Auth\RegisterTenantsController;
@@ -45,45 +46,50 @@ Route::controller(HomeController::class)->group(function () {
 Route::post('/properties/{property}/apply', [PropertyApplicationController::class, 'apply'])->name('property.apply')->middleware('auth:tenant');
 
 Route::prefix('admin')->name('admin.')->group(function(){
-    Route::controller(AdminController::class)->group(function () {
-        Route::get('/','index')->name('index');
+    Route::controller(AdminAuthController::class)->group(function () {
+        Route::get('/login', 'showLogin')->name('login');
+        Route::post('/login', 'login')->name('login.submit');
+        Route::post('/logout', 'logout')->name('logout');
     });
 
-    Route::controller(AdminUsersController::class)->prefix('/users')->group(function () {
-        Route::get('/', 'index')->name('users.index');
-        Route::get('/{type}/{id}','show')->name('users.show');
-    });
+    Route::middleware('admin.auth')->group(function () {
+        Route::controller(AdminController::class)->group(function () {
+            Route::get('/','index')->name('index');
+        });
 
-    Route::controller(AdminReportsController::class)->prefix('/reports')->group(function () {
-        Route::get('/', 'index')->name('reports.index');
-    });
+        Route::controller(AdminUsersController::class)->prefix('/users')->group(function () {
+            Route::get('/', 'index')->name('users.index');
+            Route::get('/{type}/{id}','show')->name('users.show');
+        });
 
-    Route::controller(AdminSettingsController::class)->prefix('/settings')->group(function () {
-        Route::get('/', 'index')->name('settings.index');
-    });
-    Route::controller(AdminPropertiesController::class)->prefix('/properties')->group(function () {
-        Route::get('/', 'index')->name('properties.index');
-    });
-    
-    Route::controller(AdminComplaintsController::class)->prefix('/complaints')->group(function () {
-        Route::get('/', 'index')->name('complaints.index');
-        Route::post('/{id}/resolve', 'resolve')->name('complaints.resolve');
-    });
-    Route::controller(AdminPaymentsController::class)->prefix('/payments')->group(function () {
-        Route::get('/', 'index')->name('payments.index');
-    });
+        Route::controller(AdminReportsController::class)->prefix('/reports')->group(function () {
+            Route::get('/', 'index')->name('reports.index');
+        });
 
-    Route::controller(AnnouncementController::class)->prefix('/announcements')->group(function () {
-        Route::get('/', 'index')->name('announcements.index');
-        Route::get('/create', 'create')->name('announcements.create');
-        Route::post('/store', 'store')->name('announcements.store');
-        Route::get('/{id}/edit', 'edit')->name('announcements.edit');
-        Route::put('/{id}/update', 'update')->name('announcements.update');
-        Route::delete('/{id}/delete', 'destroy')->name('announcements.destroy');
-    });
+        Route::controller(AdminSettingsController::class)->prefix('/settings')->group(function () {
+            Route::get('/', 'index')->name('settings.index');
+        });
+        Route::controller(AdminPropertiesController::class)->prefix('/properties')->group(function () {
+            Route::get('/', 'index')->name('properties.index');
+        });
+        
+        Route::controller(AdminComplaintsController::class)->prefix('/complaints')->group(function () {
+            Route::get('/', 'index')->name('complaints.index');
+            Route::post('/{id}/resolve', 'resolve')->name('complaints.resolve');
+        });
+        Route::controller(AdminPaymentsController::class)->prefix('/payments')->group(function () {
+            Route::get('/', 'index')->name('payments.index');
+        });
 
-    
-
+        Route::controller(AnnouncementController::class)->prefix('/announcements')->group(function () {
+            Route::get('/', 'index')->name('announcements.index');
+            Route::get('/create', 'create')->name('announcements.create');
+            Route::post('/store', 'store')->name('announcements.store');
+            Route::get('/{id}/edit', 'edit')->name('announcements.edit');
+            Route::put('/{id}/update', 'update')->name('announcements.update');
+            Route::delete('/{id}/delete', 'destroy')->name('announcements.destroy');
+        });
+    });  
 });
 
 

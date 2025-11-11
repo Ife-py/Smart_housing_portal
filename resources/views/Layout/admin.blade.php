@@ -124,7 +124,7 @@
             <div class="collapse navbar-collapse justify-content-end" id="adminNavbar">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <form method="POST" action="">
+                        <form method="POST" action="{{ route('admin.logout') }}">
                             @csrf
                             <button class="btn btn-link nav-link logout-btn" type="submit">
                                 <i class="bi bi-box-arrow-right"></i> Logout
